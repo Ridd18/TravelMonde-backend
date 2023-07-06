@@ -2,10 +2,12 @@
 import express from "express";
 
 // const User = require("../models/user.js")
-import { createUser, loginUser , showUserById,showUsers,userCount} from "../controllers/userController.js"
-import { addTrek } from "../models/treks.js";
+import { createUser, loginUser , showUserById,showUsers,userCount} from "../controllers/userController.js";
 import { showTrekById, showTreks, trekCount,createTrek } from "../controllers/trekController.js";
 import { CampingCount, createCamping, showCampingById, showCampings } from "../controllers/campingController.js";
+import { NationalTourCount, createNationalTour, showNationalTourById, showNationalTours } from "../controllers/nationalTourController.js";
+import { InternationalTourCount, showInternationalTours, showInternationalTourById, createInternationalTour } from "../controllers/internationalTourController.js";
+
 
 const router = express.Router()
 
@@ -27,6 +29,7 @@ router.get("/user/:id",showUserById);
 
 //TREKS
 
+//add trek
 router.post('/trek/add',createTrek )
 
 //get all treks
@@ -41,7 +44,7 @@ router.get("/trek/:id",showTrekById);
 
 //CAMPINGS
 
-
+//add camping
 router.post('/camping/add',createCamping )
 
 //get all campings
@@ -52,6 +55,40 @@ router.get("/camping/count", CampingCount);
 
 // get single camping
 router.get("/camping/:id",showCampingById);
+
+
+
+//NATIONAL TOUR
+
+//add nationalTour
+router.post('/nationalTour/add',createNationalTour )
+
+//get all nationalTours
+router.get("/nationalTour", showNationalTours);
+
+//get nationalTour count
+router.get("/nationalTour/count", NationalTourCount);
+
+// get single nationalTour
+router.get("/nationalTour/:id",showNationalTourById);
+
+
+
+
+//INTERNATIONAL TOURS
+
+//add internationalTour
+router.post('/internationalTour/add',createInternationalTour )
+
+//get all internationalTours
+router.get("/internationalTour", showInternationalTours);
+
+//get internationalTour count
+router.get("/internationalTour/count", InternationalTourCount);
+
+// get single internationalTour
+router.get("/internationalTour/:id",showInternationalTourById);
+
 
 
 

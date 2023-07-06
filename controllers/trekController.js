@@ -2,7 +2,7 @@
 import { addTrek, getTrekById, getTrekCount, getTreks } from "../models/treks.js";
 
 
-  //get all users
+  //get all treks
   export const showTreks = (req, res) => {
     getTreks((err, results) => {
       if (err) {
@@ -13,7 +13,7 @@ import { addTrek, getTrekById, getTrekCount, getTreks } from "../models/treks.js
     });
   };
 
-    //get user count
+    //get treks count
     export const trekCount = (req, res) => {
       getTrekCount((err, results) => {
         if (err) {
@@ -24,7 +24,7 @@ import { addTrek, getTrekById, getTrekCount, getTreks } from "../models/treks.js
       });
     };
   
-  //get user by id
+  //get trek by id
   export const showTrekById = (req, res) => {
     const id = req.params.id;
     getTrekById(id, (err, results) => {
@@ -35,7 +35,7 @@ import { addTrek, getTrekById, getTrekCount, getTreks } from "../models/treks.js
   };
 
 
-
+//add trek
 export const createTrek = (req, res) => {
   const data = req.body;
   addTrek(data, (err, results) => {

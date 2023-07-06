@@ -1,7 +1,7 @@
 
 import db from "../util/database.js"
 
-// get all users
+// get all treks
 export const getTreks = (result) => {
   db.query("select * from treks", (err, results) => {
     if (err) {
@@ -24,7 +24,7 @@ export const getTrekCount = (result) => {
   });
 };
 
-// get single user
+// get single trek
 export const getTrekById = (id, result) => {
   db.query("SELECT * FROM treks WHERE trek_id = ?", [id], (err, results) => {
     if (err) {
@@ -39,7 +39,7 @@ export const getTrekById = (id, result) => {
 
 
   
- //register
+ //add trek
 export const addTrek = (data, result) => {
     db.query("INSERT INTO treks SET ?", [data], (err, results) => {
       if (err) {

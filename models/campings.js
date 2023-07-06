@@ -1,7 +1,7 @@
 
 import db from "../util/database.js"
 
-// get all users
+// get all campings
 export const getCampings = (result) => {
   db.query("select * from camping", (err, results) => {
     if (err) {
@@ -24,7 +24,7 @@ export const getCampingCount = (result) => {
   });
 };
 
-// get single user
+// get single camping
 export const getCampingById = (id, result) => {
   db.query("SELECT * FROM camping WHERE camping_id = ?", [id], (err, results) => {
     if (err) {
@@ -39,7 +39,7 @@ export const getCampingById = (id, result) => {
 
 
   
- //register
+ //add campings
 export const addCamping = (data, result) => {
     db.query("INSERT INTO camping SET ?", [data], (err, results) => {
       if (err) {
