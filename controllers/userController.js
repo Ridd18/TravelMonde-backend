@@ -1,5 +1,5 @@
 
-import {login, insertUser,getUserById, getUserCount, getUsers} from "../models/user.js";
+import {login, insertUser,getUserById, getUserCount, getUsers, loginOFAdmin} from "../models/user.js";
 
 
   //get all users
@@ -34,14 +34,57 @@ import {login, insertUser,getUserById, getUserCount, getUsers} from "../models/u
     });
   };
 
-export const loginUser = (req, res) => {
+  export const loginUser = (req, res) => {
     const data = req.body;
     const email = data.email;
     const pass = data.password;
     console.log(email);
     console.log(pass);
     console.log(data);
-    login(
+   
+      login(
+        email,
+        pass,
+        (err, results) => {
+          if (err) {
+            res.send(err);
+          } else {
+            res.json(results);
+          }
+        });
+    
+
+  };
+
+
+
+// export const loginUser = (req, res) => {
+//     const data = req.body;
+//     const email = data.email;
+//     const pass = data.password;
+//     console.log(email);
+//     console.log(pass);
+//     console.log(data);
+//     login(
+//       email,
+//       pass,
+//       (err, results) => {
+//         if (err) {
+//           res.send(err);
+//         } else {
+//           res.json(results);
+//         }
+//       });
+//   };
+
+  export const loginAdmin = (req, res) => {
+    const data = req.body;
+    const email = data.email;
+    const pass = data.password;
+    console.log(email);
+    console.log(pass);
+    console.log(data);
+    loginOFAdmin(
       email,
       pass,
       (err, results) => {
@@ -52,6 +95,7 @@ export const loginUser = (req, res) => {
         }
       });
   };
+
 
 export const createUser = (req, res) => {
   const data = req.body;

@@ -2,14 +2,19 @@
 import express from "express";
 
 // const User = require("../models/user.js")
-import { createUser, loginUser , showUserById,showUsers,userCount} from "../controllers/userController.js";
+import { createUser, loginAdmin, loginUser , showUserById,showUsers,userCount} from "../controllers/userController.js";
 import { showTrekById, showTreks, trekCount,createTrek } from "../controllers/trekController.js";
 import { CampingCount, createCamping, showCampingById, showCampings } from "../controllers/campingController.js";
 import { NationalTourCount, createNationalTour, showNationalTourById, showNationalTours } from "../controllers/nationalTourController.js";
 import { InternationalTourCount, showInternationalTours, showInternationalTourById, createInternationalTour } from "../controllers/internationalTourController.js";
 
 
+
 const router = express.Router()
+
+//ADMIN
+
+router.post('/admin/login',loginAdmin )
 
 //USERS
 
