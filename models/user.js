@@ -120,3 +120,32 @@ export const insertUser = (data, result) => {
     }
   });
 };
+
+
+// Delete user
+export const deleteUserById = (id, result) => {
+  db.query("DELETE FROM users WHERE id = ?", [id], (err, results) => {
+    if (err) {
+      console.log(err);
+      result(err, null);
+    } else {
+      result(null, results);
+    }
+  });
+};
+
+// Update User to Database
+export const updateUserById = (data, id, result) => {
+  db.query(
+    "UPDATE users SET name = ? , email = ?, phone = ?  WHERE id = ?",
+    [data.name, data.username, data.email, data.age, data.phone, id],
+    (err, results) => {
+      if (err) {
+        console.log(err);
+        result(err, null);
+      } else {
+        result(null, results);
+      }
+    }
+  );
+};

@@ -1,5 +1,5 @@
 
-import {login, insertUser,getUserById, getUserCount, getUsers, loginOFAdmin} from "../models/user.js";
+import {login, insertUser,getUserById, getUserCount, getUsers, loginOFAdmin,deleteUserById,updateUserById} from "../models/user.js";
 
 
   //get all users
@@ -106,4 +106,29 @@ export const createUser = (req, res) => {
       res.json(results);
     }
   });
+};
+
+
+export const deleteUser = (req, res) => {
+  const id = req.params.id;
+  deleteUserById(id, (err, results) => {
+    if (err) {
+      res.send(err);
+    } else {
+      res.json(results);
+    }
+  });
+};
+
+// Update User
+export const updateUser = (req, res) => {
+const data = req.body;
+const id = req.params.id;
+updateUserById(data, id, (err, results) => {
+  if (err) {
+    res.send(err);
+  } else {
+    res.json(results);
+  }
+});
 };

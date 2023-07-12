@@ -2,7 +2,7 @@
 import express from "express";
 
 // const User = require("../models/user.js")
-import { createUser, loginAdmin, loginUser , showUserById,showUsers,userCount} from "../controllers/userController.js";
+import { createUser, loginAdmin, loginUser , showUserById,showUsers,userCount, deleteUser,updateUser} from "../controllers/userController.js";
 import { showTrekById, showTreks, trekCount,createTrek } from "../controllers/trekController.js";
 import { CampingCount, createCamping, showCampingById, showCampings } from "../controllers/campingController.js";
 import { NationalTourCount, createNationalTour, showNationalTourById, showNationalTours } from "../controllers/nationalTourController.js";
@@ -30,6 +30,12 @@ router.get("/user/count", userCount);
 
 // get single user
 router.get("/user/:id",showUserById);
+
+//delete user
+router.delete("/user/delete/:id", deleteUser);
+
+//update
+router.put("/user/edit/:id",updateUser);
 
 
 //TREKS
