@@ -138,7 +138,7 @@ export const deleteUserById = (id, result) => {
 export const updateUserById = (data, id, result) => {
   db.query(
     "UPDATE users SET name = ? , email = ?, phone = ?  WHERE id = ?",
-    [data.name, data.username, data.email, data.age, data.phone, id],
+    [data.name, data.email, data.phone, id],
     (err, results) => {
       if (err) {
         console.log(err);
