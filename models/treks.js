@@ -14,7 +14,7 @@ export const getTreks = (result) => {
 };
 
 export const getTrekCount = (result) => {
-  db.query("select count(*) as count from treks", (err, results) => {
+  db.query("select count(*) as TrekCount from treks", (err, results) => {
     if (err) {
       console.log(err);
       result(err, null);

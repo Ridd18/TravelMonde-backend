@@ -14,7 +14,7 @@ export const getCampings = (result) => {
 };
 
 export const getCampingCount = (result) => {
-  db.query("select count(*) as count from camping", (err, results) => {
+  db.query("select count(*) as CampingCount from camping", (err, results) => {
     if (err) {
       console.log(err);
       result(err, null);

@@ -14,7 +14,7 @@ export const getNationalTours = (result) => {
 };
 
 export const getNationalTourCount = (result) => {
-  db.query("select count(*) as count from nationalTour", (err, results) => {
+  db.query("select count(*) as NationalTourCount from nationalTour", (err, results) => {
     if (err) {
       console.log(err);
       result(err, null);

@@ -13,7 +13,7 @@ export const getUsers = (result) => {
 };
 
 export const getUserCount = (result) => {
-  db.query("select count(*) as count from users", (err, results) => {
+  db.query("select count(*) as UserCount from users", (err, results) => {
     if (err) {
       console.log(err);
       result(err, null);
