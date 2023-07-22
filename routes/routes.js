@@ -8,7 +8,9 @@ import { CampingCount, createCamping, showCampingById, showCampings } from "../c
 import { NationalTourCount, createNationalTour, showNationalTourById, showNationalTours } from "../controllers/nationalTourController.js";
 import { InternationalTourCount, showInternationalTours, showInternationalTourById, createInternationalTour } from "../controllers/internationalTourController.js";
 
+import { multipartMiddleware } from "../fileUploads/trekFiles.js"
 
+import {upload} from "../middleware/multer.js"
 
 const router = express.Router()
 
@@ -51,6 +53,15 @@ router.get("/trek/count", trekCount);
 
 // get single trek
 router.get("/trek/:id",showTrekById);
+
+
+//trek file upload
+
+//upload
+router.post("/trek/upload", upload.single("file"), (req, res) => {
+    res.json({ file: req.file });
+  });
+  
 
 
 //CAMPINGS
