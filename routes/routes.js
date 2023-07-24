@@ -8,9 +8,8 @@ import { CampingCount, createCamping, showCampingById, showCampings } from "../c
 import { NationalTourCount, createNationalTour, showNationalTourById, showNationalTours } from "../controllers/nationalTourController.js";
 import { InternationalTourCount, showInternationalTours, showInternationalTourById, createInternationalTour } from "../controllers/internationalTourController.js";
 
-import { multipartMiddleware } from "../fileUploads/trekFiles.js"
 
-import {upload} from "../middleware/multer.js"
+import {upload} from "../fileUploads/trekFiles.js"
 
 const router = express.Router()
 

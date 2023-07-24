@@ -1,15 +1,39 @@
-import multipart from 'connect-multiparty';
+
+import multer from "multer";
 
 import db from "../util/database.js";
 import fs from "fs";
 import mime from "mime";
 
 
-export const multipartMiddleware = multipart({
-    uploadDir: './uploads',
-    
+
+
+export const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "./uploads/");
+  },
+  filename: function (req, file, cb) {
+    const name = file.originalname;
+    console.log("filename in multer line 15", name);
+    cb(null, `${name}`);
+    // const result = db.query("select * from treks where name = ?", [name])
+    // console.log(result)
+    db.query(
+      "INSERT INTO trekFiles SET file_name = ?",
+      [name],
+
+      (err, results) => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log(results);
+        }
+      }
+    );
+  },
 });
 
+export const upload = multer({ storage: storage });
 
 
 
