@@ -9,7 +9,7 @@ import { NationalTourCount, createNationalTour, showNationalTourById, showNation
 import { InternationalTourCount, showInternationalTours, showInternationalTourById, createInternationalTour } from "../controllers/internationalTourController.js";
 
 
-import {upload} from "../fileUploads/trekFiles.js"
+import {upload,getListFiles,getFileCount,download} from "../fileUploads/trekFiles.js"
 
 const router = express.Router()
 
@@ -39,6 +39,7 @@ router.delete("/user/delete/:id", deleteUser);
 router.put("/user/edit/:id",updateUser);
 
 
+
 //TREKS
 
 //add trek
@@ -61,6 +62,13 @@ router.post("/trek/upload", upload.single("file"), (req, res) => {
     res.json({ file: req.file });
   });
   
+
+//get all files
+router.get("/filesTrek",getListFiles);
+
+//download
+router.get("/trek/files/:name",download)
+
 
 
 //CAMPINGS

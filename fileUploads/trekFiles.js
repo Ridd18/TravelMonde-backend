@@ -46,7 +46,7 @@ const baseDir = "C:/riddhesh/FinalYearProject/final/backend"
 export const getListFiles = (req, res) => {
   const directoryPath =  baseDir + "/uploads/";
 
-  fs.readdir(directoryPath, function (err, files) {
+  fs.readdir(directoryPath, function (err, trekFiles) {
     if (err) {
       res.status(500).send({
         message: "Unable to scan files!",
@@ -55,7 +55,7 @@ export const getListFiles = (req, res) => {
 
     let fileInfos = [];
 
-    files.forEach((file) => {
+    trekFiles.forEach((file) => {
       fileInfos.push({
         name: file,
         // url: baseUrl + file,
