@@ -6,7 +6,7 @@ import mime from "mime";
 
 export const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "./uploads/treks/");
+    cb(null, "./uploads/camps/");
   },
   filename: function (req, file, cb) {
     const name = file.originalname;
@@ -15,7 +15,7 @@ export const storage = multer.diskStorage({
     // const result = db.query("select * from treks where name = ?", [name])
     // console.log(result)
     db.query(
-      "INSERT INTO trekFiles SET file_name = ?",
+      "INSERT INTO campFiles SET file_name = ?",
       [name],
 
       (err, results) => {
@@ -29,7 +29,7 @@ export const storage = multer.diskStorage({
   },
 });
 
-export const upload = multer({ storage: storage });
+export const uploadCamps = multer({ storage: storage });
 
 const baseUrl = "http://localhost:3000/";
 
@@ -37,8 +37,8 @@ const baseDir = "C:/riddhesh/FinalYearProject/final/backend";
 
 //get all files
 
-export const getListFiles = (req, res) => {
-  const directoryPath = baseDir + "/uploads/treks/";
+export const getListOFCampFiles = (req, res) => {
+  const directoryPath = baseDir + "/uploads/camps/";
 
   fs.readdir(directoryPath, function (err, trekFiles) {
     if (err) {
@@ -62,9 +62,9 @@ export const getListFiles = (req, res) => {
 
 //download
 
-export const download = (req, res) => {
+export const downloadCamp = (req, res) => {
   const fileName = req.params.name;
-  const directoryPath = baseDir + "/uploads/treks/";
+  const directoryPath = baseDir + "/uploads/camps/";
 
   const file = directoryPath + fileName;
   const mimetype = mime.getType(file);
@@ -85,8 +85,8 @@ export const download = (req, res) => {
   });
 };
 
-export const getTrekFileCount = (result) => {
-  db.query("select count(*) as trekFilesCount from trekfiles", (err, results) => {
+export const getCampFileCount = (result) => {
+  db.query("select count(*) as campFilesCount from campfiles", (err, results) => {
     if (err) {
       console.log(err);
       result(err, null);
@@ -96,9 +96,9 @@ export const getTrekFileCount = (result) => {
   });
 };
 
-export const getFileByFileName = (file_name, result) => {
+export const getCampFileByFileName = (file_name, result) => {
   db.query(
-    "select * from trekfiles WHERE file_name = ?",
+    "select * from campfiles WHERE file_name = ?",
     [file_name],
     (err, results) => {
       if (err) {

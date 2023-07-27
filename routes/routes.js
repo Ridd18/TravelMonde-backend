@@ -2,26 +2,63 @@
 import express from "express";
 
 // const User = require("../models/user.js")
-import { createUser, loginAdmin, loginUser , showUserById,showUsers,userCount, deleteUser,updateUser} from "../controllers/userController.js";
-import { showTrekById, showTreks, trekCount,createTrek, showTrekByTrekName, trekFileCount } from "../controllers/trekController.js";
-import { CampingCount, createCamping, showCampingById, showCampings } from "../controllers/campingController.js";
-import { NationalTourCount, createNationalTour, showNationalTourById, showNationalTours } from "../controllers/nationalTourController.js";
-import { InternationalTourCount, showInternationalTours, showInternationalTourById, createInternationalTour } from "../controllers/internationalTourController.js";
+import {
+  createUser,
+  loginAdmin,
+  loginUser,
+  showUserById,
+  showUsers,
+  userCount,
+  deleteUser,
+  updateUser,
+} from "../controllers/userController.js";
+import {
+  showTrekById,
+  showTreks,
+  trekCount,
+  createTrek,
+  showTrekByTrekName,
+  trekFileCount,
+} from "../controllers/trekController.js";
+import {
+  CampingCount,
+  campFileCount,
+  createCamping,
+  showCampByCampName,
+  showCampingById,
+  showCampings,
+} from "../controllers/campingController.js";
+import {
+  NationalTourCount,
+  createNationalTour,
+  showNationalTourById,
+  showNationalTours,
+} from "../controllers/nationalTourController.js";
+import {
+  InternationalTourCount,
+  showInternationalTours,
+  showInternationalTourById,
+  createInternationalTour,
+} from "../controllers/internationalTourController.js";
 
+import { upload, getListFiles, download } from "../fileUploads/trekFiles.js";
+import {
+  downloadCamp,
+  getListOFCampFiles,
+  uploadCamps,
+} from "../fileUploads/campFiles.js";
 
-import {upload,getListFiles,download,} from "../fileUploads/trekFiles.js"
-
-const router = express.Router()
+const router = express.Router();
 
 //ADMIN
 
-router.post('/admin/login',loginAdmin )
+router.post("/admin/login", loginAdmin);
 
 //USERS
 
-router.post('/user/login',loginUser )
+router.post("/user/login", loginUser);
 
-router.post('/user/register',createUser )
+router.post("/user/register", createUser);
 
 //get all users
 router.get("/user", showUsers);
@@ -30,20 +67,18 @@ router.get("/user", showUsers);
 router.get("/user/count", userCount);
 
 // get single user
-router.get("/user/:id",showUserById);
+router.get("/user/:id", showUserById);
 
 //delete user
 router.delete("/user/delete/:id", deleteUser);
 
 //update
-router.put("/user/edit/:id",updateUser);
-
-
+router.put("/user/edit/:id", updateUser);
 
 //TREKS
 
 //add trek
-router.post('/trek/add',createTrek )
+router.post("/trek/add", createTrek);
 
 //get all treks
 router.get("/trek", showTreks);
@@ -52,34 +87,31 @@ router.get("/trek", showTreks);
 router.get("/trek/count", trekCount);
 
 // get single trek
-router.get("/trek/:id",showTrekById);
-
+router.get("/trek/:id", showTrekById);
 
 //trek file upload
 
 //upload
 router.post("/trek/upload", upload.single("file"), (req, res) => {
-    res.json({ file: req.file });
-  });
-  
+  res.json({ file: req.file });
+});
 
 //get all files
-router.get("/filesTrek",getListFiles);
+router.get("/filesTrek", getListFiles);
 
 //download
-router.get("/trek/files/:name",download)
+router.get("/trek/files/:name", download);
 
 //get file by file name
-router.get("/trek/file/:name",showTrekByTrekName)
+router.get("/trek/file/:name", showTrekByTrekName);
 
 //get file count
-router.get("/trek/file/count",trekFileCount)
-
+router.get("/trek/file/count", trekFileCount);
 
 //CAMPINGS
 
 //add camping
-router.post('/camping/add',createCamping )
+router.post("/camping/add", createCamping);
 
 //get all campings
 router.get("/camping", showCampings);
@@ -88,14 +120,31 @@ router.get("/camping", showCampings);
 router.get("/camping/count", CampingCount);
 
 // get single camping
-router.get("/camping/:id",showCampingById);
+router.get("/camping/:id", showCampingById);
 
+//camp file upload
 
+//upload
+router.post("/camping/upload", uploadCamps.single("file"), (req, res) => {
+  res.json({ file: req.file });
+});
+
+//get all files
+router.get("/filesCamping", getListOFCampFiles);
+
+//download
+router.get("/camping/files/:name", downloadCamp);
+
+//get file by file name
+router.get("/camping/file/:name", showCampByCampName);
+
+//get file count
+router.get("/camping/file/count", campFileCount);
 
 //NATIONAL TOUR
 
 //add nationalTour
-router.post('/nationalTour/add',createNationalTour )
+router.post("/nationalTour/add", createNationalTour);
 
 //get all nationalTours
 router.get("/nationalTour", showNationalTours);
@@ -104,15 +153,12 @@ router.get("/nationalTour", showNationalTours);
 router.get("/nationalTour/count", NationalTourCount);
 
 // get single nationalTour
-router.get("/nationalTour/:id",showNationalTourById);
-
-
-
+router.get("/nationalTour/:id", showNationalTourById);
 
 //INTERNATIONAL TOURS
 
 //add internationalTour
-router.post('/internationalTour/add',createInternationalTour )
+router.post("/internationalTour/add", createInternationalTour);
 
 //get all internationalTours
 router.get("/internationalTour", showInternationalTours);
@@ -121,9 +167,6 @@ router.get("/internationalTour", showInternationalTours);
 router.get("/internationalTour/count", InternationalTourCount);
 
 // get single internationalTour
-router.get("/internationalTour/:id",showInternationalTourById);
-
-
-
+router.get("/internationalTour/:id", showInternationalTourById);
 
 export default router;
