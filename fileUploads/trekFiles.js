@@ -1,12 +1,8 @@
-
 import multer from "multer";
 
 import db from "../util/database.js";
 import fs from "fs";
 import mime from "mime";
-
-
-
 
 export const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -35,16 +31,14 @@ export const storage = multer.diskStorage({
 
 export const upload = multer({ storage: storage });
 
-
-
 const baseUrl = "http://localhost:3000/";
 
-const baseDir = "C:/riddhesh/FinalYearProject/final/backend"
+const baseDir = "C:/riddhesh/FinalYearProject/final/backend";
 
 //get all files
 
 export const getListFiles = (req, res) => {
-  const directoryPath =  baseDir + "/uploads/";
+  const directoryPath = baseDir + "/uploads/";
 
   fs.readdir(directoryPath, function (err, trekFiles) {
     if (err) {
@@ -72,13 +66,13 @@ export const download = (req, res) => {
   const fileName = req.params.name;
   const directoryPath = baseDir + "/uploads/";
 
-  const file = directoryPath + fileName ;
+  const file = directoryPath + fileName;
   const mimetype = mime.getType(file);
 
   console.log(mimetype);
 
-  res.setHeader('Content-Type', mimetype)
-  res.setHeader('Content-disposition', `attachment; filename="${fileName}"`);
+  res.setHeader("Content-Type", mimetype);
+  res.setHeader("Content-disposition", `attachment; filename="${fileName}"`);
 
   res.download(file, fileName, (err) => {
     console.log(file);
@@ -91,15 +85,29 @@ export const download = (req, res) => {
   });
 };
 
-export const getFileCount = (result) => {
-    db.query("select count(*) as count from file", (err, results) => {
+export const getTrekFileCount = (result) => {
+  db.query("select count(*) as trekFilesCount from trekfiles", (err, results) => {
+    if (err) {
+      console.log(err);
+      result(err, null);
+    } else {
+      result(null, results);
+    }
+  });
+};
+
+export const getFileByFileName = (file_name, result) => {
+  db.query(
+    "select * from trekfiles WHERE file_name = ?",
+    [file_name],
+    (err, results) => {
       if (err) {
         console.log(err);
         result(err, null);
       } else {
         result(null, results);
       }
-    });
-  };
-  
+    }
+  );
+};
 

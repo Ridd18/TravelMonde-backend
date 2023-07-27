@@ -3,13 +3,13 @@ import express from "express";
 
 // const User = require("../models/user.js")
 import { createUser, loginAdmin, loginUser , showUserById,showUsers,userCount, deleteUser,updateUser} from "../controllers/userController.js";
-import { showTrekById, showTreks, trekCount,createTrek } from "../controllers/trekController.js";
+import { showTrekById, showTreks, trekCount,createTrek, showTrekByTrekName, trekFileCount } from "../controllers/trekController.js";
 import { CampingCount, createCamping, showCampingById, showCampings } from "../controllers/campingController.js";
 import { NationalTourCount, createNationalTour, showNationalTourById, showNationalTours } from "../controllers/nationalTourController.js";
 import { InternationalTourCount, showInternationalTours, showInternationalTourById, createInternationalTour } from "../controllers/internationalTourController.js";
 
 
-import {upload,getListFiles,getFileCount,download} from "../fileUploads/trekFiles.js"
+import {upload,getListFiles,download,} from "../fileUploads/trekFiles.js"
 
 const router = express.Router()
 
@@ -69,6 +69,11 @@ router.get("/filesTrek",getListFiles);
 //download
 router.get("/trek/files/:name",download)
 
+//get file by file name
+router.get("/trek/file/:name",showTrekByTrekName)
+
+//get file count
+router.get("/trek/file/count",trekFileCount)
 
 
 //CAMPINGS
