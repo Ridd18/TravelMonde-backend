@@ -29,9 +29,11 @@ import {
   showCampings,
 } from "../controllers/campingController.js";
 import {
+  NationalFileCount,
   NationalTourCount,
   createNationalTour,
   showNationalTourById,
+  showNationalTourByNationalName,
   showNationalTours,
 } from "../controllers/nationalTourController.js";
 import {
@@ -39,14 +41,25 @@ import {
   showInternationalTours,
   showInternationalTourById,
   createInternationalTour,
+  showInternationalTourIdByFilename,
+  InternationalFileCount,
+  showInternationalTourFileById,
 } from "../controllers/internationalTourController.js";
 
 import { upload, getListFiles, download } from "../fileUploads/trekFiles.js";
+
 import {
   downloadCamp,
   getListOFCampFiles,
   uploadCamps,
 } from "../fileUploads/campFiles.js";
+
+import {
+  downloadNational,
+  getListOFNationalFiles,
+  uploadNationals,
+} from "../fileUploads/nationalFiles.js";
+import { downloadInternational, getListOFInternationalFiles, uploadInternationals } from "../fileUploads/internationalFiles.js";
 
 const router = express.Router();
 
@@ -155,6 +168,29 @@ router.get("/nationalTour/count", NationalTourCount);
 // get single nationalTour
 router.get("/nationalTour/:id", showNationalTourById);
 
+//national file upload
+
+//upload
+router.post(
+  "/nationalTour/upload",
+  uploadNationals.single("file"),
+  (req, res) => {
+    res.json({ file: req.file });
+  }
+);
+
+//get all files
+router.get("/filesnationalTour", getListOFNationalFiles);
+
+//download
+router.get("/nationalTour/files/:name", downloadNational);
+
+//get file by file name
+router.get("/nationalTour/file/:name", showNationalTourByNationalName);
+
+//get file count
+router.get("/nationalTour/file/count", NationalFileCount);
+
 //INTERNATIONAL TOURS
 
 //add internationalTour
@@ -168,5 +204,44 @@ router.get("/internationalTour/count", InternationalTourCount);
 
 // get single internationalTour
 router.get("/internationalTour/:id", showInternationalTourById);
+
+//national file upload
+
+//upload
+router.post(
+  "/internationalTour/upload",
+  uploadInternationals.single("file"),
+  (req, res) => {
+    res.json({ file: req.file });
+  }
+);
+
+//get all files
+router.get("/filesinternationalTour", getListOFInternationalFiles);
+
+//download
+router.get("/internationalTour/files/:name", downloadInternational);
+
+//get file by file name
+router.get("/internationalTour/file/:name", showNationalTourByNationalName);
+
+//get file count
+router.get("/internationalTour/file/count", InternationalFileCount);
+
+
+//get tour id by file name
+router.get(
+  "/internationalTour/fileByName/:name",
+  showInternationalTourIdByFilename
+);
+
+
+//get tour file by id
+router.get(
+  "/internationalTour/fileById/:id",
+  showInternationalTourFileById
+);
+
+
 
 export default router;

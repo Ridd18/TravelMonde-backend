@@ -6,7 +6,7 @@ import mime from "mime";
 
 export const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "./uploads/camps/");
+    cb(null, "./uploads/nationals/");
   },
   filename: function (req, file, cb) {
     const name = file.originalname;
@@ -15,7 +15,7 @@ export const storage = multer.diskStorage({
     // const result = db.query("select * from treks where name = ?", [name])
     // console.log(result)
     db.query(
-      "INSERT INTO campFiles SET file_name = ?",
+      "INSERT INTO nationalfiles SET file_name = ?",
       [name],
 
       (err, results) => {
@@ -29,7 +29,7 @@ export const storage = multer.diskStorage({
   },
 });
 
-export const uploadCamps = multer({ storage: storage });
+export const uploadNationals = multer({ storage: storage });
 
 const baseUrl = "http://localhost:3000/";
 
@@ -37,10 +37,10 @@ const baseDir = "C:/riddhesh/FinalYearProject/final/backend";
 
 //get all files
 
-export const getListOFCampFiles = (req, res) => {
-  const directoryPath = baseDir + "/uploads/camps/";
+export const getListOFNationalFiles = (req, res) => {
+  const directoryPath = baseDir + "/uploads/nationals/";
 
-  fs.readdir(directoryPath, function (err, campFiles) {
+  fs.readdir(directoryPath, function (err, nationalFiles) {
     if (err) {
       res.status(500).send({
         message: "Unable to scan files!",
@@ -49,7 +49,7 @@ export const getListOFCampFiles = (req, res) => {
 
     let fileInfos = [];
 
-    campFiles.forEach((file) => {
+    nationalFiles.forEach((file) => {
       fileInfos.push({
         name: file,
         // url: baseUrl + file,
@@ -62,9 +62,9 @@ export const getListOFCampFiles = (req, res) => {
 
 //download
 
-export const downloadCamp = (req, res) => {
+export const downloadNational = (req, res) => {
   const fileName = req.params.name;
-  const directoryPath = baseDir + "/uploads/camps/";
+  const directoryPath = baseDir + "/uploads/nationals/";
 
   const file = directoryPath + fileName;
   const mimetype = mime.getType(file);
@@ -85,8 +85,8 @@ export const downloadCamp = (req, res) => {
   });
 };
 
-export const getCampFileCount = (result) => {
-  db.query("select count(*) as campFilesCount from campfiles", (err, results) => {
+export const getNationalFileCount = (result) => {
+  db.query("select count(*) as nationalFilesCount from nationalFiles", (err, results) => {
     if (err) {
       console.log(err);
       result(err, null);
@@ -96,9 +96,9 @@ export const getCampFileCount = (result) => {
   });
 };
 
-export const getCampFileByFileName = (file_name, result) => {
+export const getNationalFileByFileName = (file_name, result) => {
   db.query(
-    "select * from campfiles WHERE file_name = ?",
+    "select * from nationalFiles WHERE file_name = ?",
     [file_name],
     (err, results) => {
       if (err) {
