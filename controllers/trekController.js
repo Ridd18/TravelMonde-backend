@@ -1,4 +1,10 @@
-import { getFileByFileName, getTrekFileCount } from "../fileUploads/trekFiles.js";
+import {
+  getFileByFileName,
+  getTrekFileById,
+  getTrekFileCount,
+  getTrekIdByFileName,
+} from "../fileUploads/trekFiles.js";
+
 import {
   addTrek,
   getTrekById,
@@ -68,5 +74,26 @@ export const trekFileCount = (req, res) => {
     } else {
       res.json(results);
     }
+  });
+};
+
+//get trek id by trek name
+export const showTrekIdByFilename = (req, res) => {
+  const name = req.params.name;
+  getTrekIdByFileName(name, (err, results) => {
+    if (err) {
+      res.send(err);
+    } else res.json(results);
+  });
+};
+
+//get trek files by trek id
+export const showTrekFileById = (req, res) => {
+  const id = req.params.id;
+  console.log(id);
+  getTrekFileById(id, (err, results) => {
+    if (err) {
+      res.send(err);
+    } else res.json(results);
   });
 };

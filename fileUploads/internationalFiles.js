@@ -75,6 +75,8 @@ const baseUrl = "http://localhost:3000/";
 
 const baseDir = "C:/riddhesh/FinalYearProject/final/backend";
 
+
+//get tour id by filename
 export const getInternationalIdByFileName = (file_name, result) => {
   db.query(
     "select international_id as id from internationalTour WHERE name = ?",
@@ -170,6 +172,7 @@ export const getInternationalFileByFileName = (file_name, result) => {
 };
 
 
+//get tour files by international id
 export const getInternationalFileById = (id, result) => {
     db.query(
       "select * from internationalFiles WHERE international_id = ?",

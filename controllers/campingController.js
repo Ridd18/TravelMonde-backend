@@ -1,7 +1,7 @@
 
 import { addCamping, getCampingById, getCampingCount, getCampings } from "../models/campings.js";
 
-import { getCampFileByFileName, getCampFileCount } from "../fileUploads/campFiles.js"
+import { getCampFileByFileName, getCampFileById, getCampFileCount, getCampIdByFileName } from "../fileUploads/campFiles.js"
 
   //get all campings
   export const showCampings = (req, res) => {
@@ -67,5 +67,26 @@ export const campFileCount = (req, res) => {
     } else {
       res.json(results);
     }
+  });
+};
+
+//get camp id by camp name
+export const showCampIdByFilename = (req, res) => {
+  const name = req.params.name;
+  getCampIdByFileName(name, (err, results) => {
+    if (err) {
+      res.send(err);
+    } else res.json(results);
+  });
+};
+
+//get camp files by camp id
+export const showCampFileById = (req, res) => {
+  const id = req.params.id;
+  console.log(id);
+  getCampFileById(id, (err, results) => {
+    if (err) {
+      res.send(err);
+    } else res.json(results);
   });
 };

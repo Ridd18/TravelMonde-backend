@@ -19,12 +19,16 @@ import {
   createTrek,
   showTrekByTrekName,
   trekFileCount,
+  showTrekIdByFilename,
+  showTrekFileById,
 } from "../controllers/trekController.js";
 import {
   CampingCount,
   campFileCount,
   createCamping,
   showCampByCampName,
+  showCampFileById,
+  showCampIdByFilename,
   showCampingById,
   showCampings,
 } from "../controllers/campingController.js";
@@ -32,6 +36,8 @@ import {
   NationalFileCount,
   NationalTourCount,
   createNationalTour,
+  showNationalFileById,
+  showNationalIdByFilename,
   showNationalTourById,
   showNationalTourByNationalName,
   showNationalTours,
@@ -59,7 +65,11 @@ import {
   getListOFNationalFiles,
   uploadNationals,
 } from "../fileUploads/nationalFiles.js";
-import { downloadInternational, getListOFInternationalFiles, uploadInternationals } from "../fileUploads/internationalFiles.js";
+import {
+  downloadInternational,
+  getListOFInternationalFiles,
+  uploadInternationals,
+} from "../fileUploads/internationalFiles.js";
 
 const router = express.Router();
 
@@ -121,6 +131,12 @@ router.get("/trek/file/:name", showTrekByTrekName);
 //get file count
 router.get("/trek/file/count", trekFileCount);
 
+//get tour id by file name
+router.get("/trek/fileByName/:name", showTrekIdByFilename);
+
+//get tour file by id
+router.get("/trek/fileById/:id", showTrekFileById);
+
 //CAMPINGS
 
 //add camping
@@ -153,6 +169,12 @@ router.get("/camping/file/:name", showCampByCampName);
 
 //get file count
 router.get("/camping/file/count", campFileCount);
+
+//get tour id by file name
+router.get("/camping/fileByName/:name", showCampIdByFilename);
+
+//get tour file by id
+router.get("/camping/fileById/:id", showCampFileById);
 
 //NATIONAL TOUR
 
@@ -191,6 +213,12 @@ router.get("/nationalTour/file/:name", showNationalTourByNationalName);
 //get file count
 router.get("/nationalTour/file/count", NationalFileCount);
 
+//get tour id by file name
+router.get("/nationalTour/fileByName/:name", showNationalIdByFilename);
+
+//get tour file by id
+router.get("/nationalTour/fileById/:id", showNationalFileById);
+
 //INTERNATIONAL TOURS
 
 //add internationalTour
@@ -228,20 +256,13 @@ router.get("/internationalTour/file/:name", showNationalTourByNationalName);
 //get file count
 router.get("/internationalTour/file/count", InternationalFileCount);
 
-
 //get tour id by file name
 router.get(
   "/internationalTour/fileByName/:name",
   showInternationalTourIdByFilename
 );
 
-
 //get tour file by id
-router.get(
-  "/internationalTour/fileById/:id",
-  showInternationalTourFileById
-);
-
-
+router.get("/internationalTour/fileById/:id", showInternationalTourFileById);
 
 export default router;

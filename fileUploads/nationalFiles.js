@@ -12,18 +12,30 @@ export const storage = multer.diskStorage({
     const name = file.originalname;
     console.log("filename in multer line 15", name);
     cb(null, `${name}`);
-    // const result = db.query("select * from treks where name = ?", [name])
-    // console.log(result)
-    db.query(
-      "INSERT INTO nationalfiles SET file_name = ?",
-      [name],
-
-      (err, results) => {
+    const newName = name.slice(0, name.length - 4);
+    console.log("filename in multer line 20", newName);
+    
+  db.query(
+      "select national_id from nationaltour where name = ?",
+      [newName],
+      (err, res) => {
         if (err) {
-          console.log(err);
-        } else {
-          console.log(results);
+          console.log("Error selecting from USERS: ", err);
+          // return result(err, null);
         }
+        //res should have the value for the familyId of the given user so in next line pass res not result
+        db.query(
+          "INSERT INTO nationalfiles (file_name,national_id) VALUES (?,?)",
+          [name, res[0].national_id],
+          (err, res) => {
+            if (err) {
+              console.log("Error inserting in TASKS: ", err);
+              // return result(err, null);
+            }
+          }
+        );
+        console.log("created task: ");
+        // return result(null, err);
       }
     );
   },
@@ -111,3 +123,37 @@ export const getNationalFileByFileName = (file_name, result) => {
   );
 };
 
+
+
+//get national files by national id
+export const getNationalFileById = (id, result) => {
+  db.query(
+    "select * from nationalfiles WHERE national_id = ?",
+    [id],
+    (err, results) => {
+      if (err) {
+        console.log(err);
+        result(err, null);
+      } else {
+        result(null, results[0]);
+      }
+    }
+  );
+};
+
+
+//get tour id by filename
+export const getNationalIdByFileName = (file_name, result) => {
+  db.query(
+    "select national_id as id from nationaltour WHERE name = ?",
+    [file_name],
+    (err, results) => {
+      if (err) {
+        console.log(err);
+        result(err, null);
+      } else {
+        result(null, results);
+      }
+    }
+  );
+};

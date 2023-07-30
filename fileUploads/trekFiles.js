@@ -12,20 +12,33 @@ export const storage = multer.diskStorage({
     const name = file.originalname;
     console.log("filename in multer line 15", name);
     cb(null, `${name}`);
-    // const result = db.query("select * from treks where name = ?", [name])
-    // console.log(result)
-    db.query(
-      "INSERT INTO trekFiles SET file_name = ?",
-      [name],
+    const newName = name.slice(0, name.length - 4);
+    console.log("filename in multer line 20", newName);
 
-      (err, results) => {
+    db.query(
+      "select trek_id from treks where name = ?",
+      [newName],
+      (err, res) => {
         if (err) {
-          console.log(err);
-        } else {
-          console.log(results);
+          console.log("Error selecting from USERS: ", err);
+          // return result(err, null);
         }
+        //res should have the value for the familyId of the given user so in next line pass res not result
+        db.query(
+          "INSERT INTO trekfiles (file_name,trek_id) VALUES (?,?)",
+          [name, res[0].trek_id],
+          (err, res) => {
+            if (err) {
+              console.log("Error inserting in TASKS: ", err);
+              // return result(err, null);
+            }
+          }
+        );
+        console.log("created task: ");
+        // return result(null, err);
       }
     );
+
   },
 });
 
@@ -34,6 +47,22 @@ export const upload = multer({ storage: storage });
 const baseUrl = "http://localhost:3000/";
 
 const baseDir = "C:/riddhesh/FinalYearProject/final/backend";
+
+//get tour id by filename
+export const getTrekIdByFileName = (file_name, result) => {
+  db.query(
+    "select trek_id as id from treks WHERE name = ?",
+    [file_name],
+    (err, results) => {
+      if (err) {
+        console.log(err);
+        result(err, null);
+      } else {
+        result(null, results);
+      }
+    }
+  );
+};
 
 //get all files
 
@@ -86,14 +115,17 @@ export const download = (req, res) => {
 };
 
 export const getTrekFileCount = (result) => {
-  db.query("select count(*) as trekFilesCount from trekfiles", (err, results) => {
-    if (err) {
-      console.log(err);
-      result(err, null);
-    } else {
-      result(null, results);
+  db.query(
+    "select count(*) as trekFilesCount from trekfiles",
+    (err, results) => {
+      if (err) {
+        console.log(err);
+        result(err, null);
+      } else {
+        result(null, results);
+      }
     }
-  });
+  );
 };
 
 export const getFileByFileName = (file_name, result) => {
@@ -111,3 +143,18 @@ export const getFileByFileName = (file_name, result) => {
   );
 };
 
+//get trek files by trek id
+export const getTrekFileById = (id, result) => {
+  db.query(
+    "select * from trekfiles WHERE trek_id = ?",
+    [id],
+    (err, results) => {
+      if (err) {
+        console.log(err);
+        result(err, null);
+      } else {
+        result(null, results[0]);
+      }
+    }
+  );
+};

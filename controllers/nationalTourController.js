@@ -1,5 +1,5 @@
 
-import { getNationalFileByFileName, getNationalFileCount } from "../fileUploads/nationalFiles.js";
+import { getNationalFileByFileName, getNationalFileById, getNationalFileCount, getNationalIdByFileName } from "../fileUploads/nationalFiles.js";
 import { addNationalTour, getNationalTourById, getNationalTourCount, getNationalTours } from "../models/nationalTours.js";
 
 
@@ -67,5 +67,26 @@ export const NationalFileCount = (req, res) => {
     } else {
       res.json(results);
     }
+  });
+};
+
+//get national id by national name
+export const showNationalIdByFilename = (req, res) => {
+  const name = req.params.name;
+  getNationalIdByFileName(name, (err, results) => {
+    if (err) {
+      res.send(err);
+    } else res.json(results);
+  });
+};
+
+//get national files by national id
+export const showNationalFileById = (req, res) => {
+  const id = req.params.id;
+  console.log(id);
+  getNationalFileById(id, (err, results) => {
+    if (err) {
+      res.send(err);
+    } else res.json(results);
   });
 };
