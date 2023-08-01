@@ -24,23 +24,32 @@ import {
   trekFileCount,
   showTrekIdByFilename,
   showTrekFileById,
+  showAVGTrekById,
+  showTrekRatings,
+  createTrekRating,
 } from "../controllers/trekController.js";
 import {
   CampingCount,
   campFileCount,
+  createCampRating,
   createCamping,
+  showAVGCampById,
   showCampByCampName,
   showCampFileById,
   showCampIdByFilename,
+  showCampRatings,
   showCampingById,
   showCampings,
 } from "../controllers/campingController.js";
 import {
   NationalFileCount,
   NationalTourCount,
+  createNationalRating,
   createNationalTour,
+  showAVGNationalTourById,
   showNationalFileById,
   showNationalIdByFilename,
+  showNationalRatings,
   showNationalTourById,
   showNationalTourByNationalName,
   showNationalTours,
@@ -55,6 +64,7 @@ import {
   showInternationalTourFileById,
   createInternationalRating,
   showInternationalRatings,
+  showAVGInternationalTourById,
 } from "../controllers/internationalTourController.js";
 
 import { upload, getListFiles, download } from "../fileUploads/trekFiles.js";
@@ -142,6 +152,20 @@ router.get("/trek/fileByName/:name", showTrekIdByFilename);
 //get tour file by id
 router.get("/trek/fileById/:id", showTrekFileById);
 
+
+//ratingss
+
+//avg rating
+router.get('/trek/ratings/:id',showAVGTrekById)
+
+
+//add ratings
+router.post('/trek/addrating',createTrekRating)
+
+//get all ratings
+router.get("/trekRatings", showTrekRatings);
+
+
 //CAMPINGS
 
 //add camping
@@ -180,6 +204,20 @@ router.get("/camping/fileByName/:name", showCampIdByFilename);
 
 //get tour file by id
 router.get("/camping/fileById/:id", showCampFileById);
+
+//ratingss
+
+//avg rating
+router.get('/camping/ratings/:id',showAVGCampById)
+
+
+//add ratings
+router.post('/camping/addrating',createCampRating)
+
+//get all ratings
+router.get("/campingRatings", showCampRatings);
+
+
 
 //NATIONAL TOUR
 
@@ -223,6 +261,20 @@ router.get("/nationalTour/fileByName/:name", showNationalIdByFilename);
 
 //get tour file by id
 router.get("/nationalTour/fileById/:id", showNationalFileById);
+
+
+//ratingss
+
+//avg rating
+router.get('/nationalTour/ratings/:id',showAVGNationalTourById)
+
+
+//add ratings
+router.post('/nationalTour/addrating',createNationalRating)
+
+//get all ratings
+router.get("/nationalTourRatings", showNationalRatings);
+
 
 //INTERNATIONAL TOURS
 
@@ -273,24 +325,28 @@ router.get("/internationalTour/fileById/:id", showInternationalTourFileById);
 
 //ratinggg
 
-router.get('/internationalTour/ratings/:itemID', (req, res) => {
-  const itemID = req.params.itemID;
-  const sql = 'SELECT AVG(rating) as avg_rating FROM internationalrating WHERE international_id = ?';
-  db.query(sql, [itemID], (err, result) => {
-    if (err) {
-      console.error('Error fetching average rating:', err);
-      res.status(500).json({ error: 'Error fetching average rating' });
-    } else {
-      res.status(200).json({ averageRating: result[0].avg_rating });
-    }
-  });
-});
+// router.get('/internationalTour/ratings/:itemID', (req, res) => {
+//   const itemID = req.params.itemID;
+//   const sql = 'SELECT AVG(rating) as avg_rating FROM rating WHERE international_id = ?';
+//   db.query(sql, [itemID], (err, result) => {
+//     if (err) {
+//       console.error('Error fetching average rating:', err);
+//       res.status(500).json({ error: 'Error fetching average rating' });
+//     } else {
+//       res.status(200).json({ averageRating: result[0].avg_rating });
+//     }
+//   });
+// });
+
+//avg rating
+router.get('/internationalTour/ratings/:id',showAVGInternationalTourById)
+
 
 //add ratings
 router.post('/internationalTour/addrating',createInternationalRating)
 
 //get all ratings
-router.get("/internationalTour/ratings", showInternationalRatings);
+router.get("/internationalTourRatings", showInternationalRatings);
 
 // router.post('/internationalTour/addratings', (req, res) => {
 //   const { rating, id } = req.body;

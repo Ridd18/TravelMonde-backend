@@ -1,5 +1,4 @@
-
-import db from "../util/database.js"
+import db from "../util/database.js";
 
 // get all treks
 export const getTreks = (result) => {
@@ -36,18 +35,56 @@ export const getTrekById = (id, result) => {
   });
 };
 
-
-
-  
- //add trek
+//add trek
 export const addTrek = (data, result) => {
-    db.query("INSERT INTO treks SET ?", [data], (err, results) => {
+  db.query("INSERT INTO treks SET ?", [data], (err, results) => {
+    if (err) {
+      console.log(err);
+      result(err, null);
+    } else {
+      result(null, results);
+    }
+  });
+};
+
+
+
+export const addTrekRating = (rating, id, result) => {
+  const sql = "INSERT INTO trekrating (rating, trek_id) VALUES (?, ?)";
+  db.query(sql, [rating, id], (err, results) => {
+    if (err) {
+      console.error("Error inserting rating:", err);
+      result(err, null);
+    } else {
+      result(null, results);
+    }
+  });
+};
+
+// get all rating
+export const getTrekRatings = (result) => {
+  db.query("select * from trekrating", (err, results) => {
+    if (err) {
+      console.log(err);
+      result(err, null);
+    } else {
+      result(null, results);
+    }
+  });
+};
+
+// get avg rating
+export const getTrekAverageRating = (id, result) => {
+  db.query(
+    "select AVG(rating) as trek_avg from trekrating WHERE trek_id = ?",
+    [id],
+    (err, results) => {
       if (err) {
         console.log(err);
         result(err, null);
       } else {
-        result(null, results);
+        result(null, results[0]);
       }
-    });
-  };
-   
+    }
+  );
+};

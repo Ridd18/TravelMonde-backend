@@ -1,5 +1,5 @@
 
-import { addCamping, getCampingById, getCampingCount, getCampings } from "../models/campings.js";
+import { addCampRating, addCamping, getCampAverageRating, getCampRatings, getCampingById, getCampingCount, getCampings } from "../models/campings.js";
 
 import { getCampFileByFileName, getCampFileById, getCampFileCount, getCampIdByFileName } from "../fileUploads/campFiles.js"
 
@@ -85,6 +85,47 @@ export const showCampFileById = (req, res) => {
   const id = req.params.id;
   console.log(id);
   getCampFileById(id, (err, results) => {
+    if (err) {
+      res.send(err);
+    } else res.json(results);
+  });
+};
+
+
+//add rating to tour
+export const createCampRating = (req, res) => {
+  const { rating, id } = req.body;
+  const data = req.body;
+  console.log(data);
+  console.log(rating);
+
+  console.log(id);
+  addCampRating(rating, id, (err, results) => {
+    if (err) {
+      res.send(err);
+      res.status(500);
+    } else {
+      res.json(results);
+      res.status(200);
+    }
+  });
+};
+
+//get all ratings
+export const showCampRatings = (req, res) => {
+  getCampRatings((err, results) => {
+    if (err) {
+      res.send(err);
+    } else {
+      res.json(results);
+    }
+  });
+};
+
+//get InternationalTour by id
+export const showAVGCampById = (req, res) => {
+  const id = req.params.id;
+  getCampAverageRating(id, (err, results) => {
     if (err) {
       res.send(err);
     } else res.json(results);

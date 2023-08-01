@@ -49,3 +49,44 @@ export const addNationalTour = (data, result) => {
     });
   };
    
+
+//add rating
+export const addNationalRating = (rating, id, result) => {
+  const sql = "INSERT INTO nationalrating (rating, national_id) VALUES (?, ?)";
+  db.query(sql, [rating, id], (err, results) => {
+    if (err) {
+      console.error("Error inserting rating:", err);
+      result(err, null);
+    } else {
+      result(null, results);
+    }
+  });
+};
+
+// get all rating
+export const getNationalRatings = (result) => {
+  db.query("select * from nationalrating", (err, results) => {
+    if (err) {
+      console.log(err);
+      result(err, null);
+    } else {
+      result(null, results);
+    }
+  });
+};
+
+// get avg rating
+export const getNationalAverageRating = (id, result) => {
+  db.query(
+    "select AVG(rating) as avg_rating from nationalrating WHERE national_id = ?",
+    [id],
+    (err, results) => {
+      if (err) {
+        console.log(err);
+        result(err, null);
+      } else {
+        result(null, results[0]);
+      }
+    }
+  );
+};

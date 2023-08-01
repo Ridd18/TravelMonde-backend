@@ -7,6 +7,7 @@ import {
 import {
   addInternationalRating,
   addInternationalTour,
+  getInternationalAverageRating,
   getInternationalRatings,
   getInternationalTourById,
   getInternationalTourCount,
@@ -110,14 +111,13 @@ export const createInternationalRating = (req, res) => {
   addInternationalRating(rating, id, (err, results) => {
     if (err) {
       res.send(err);
-      res.status(500)
+      res.status(500);
     } else {
       res.json(results);
-      res.status(200)
+      res.status(200);
     }
   });
 };
-
 
 //get all ratings
 export const showInternationalRatings = (req, res) => {
@@ -127,5 +127,15 @@ export const showInternationalRatings = (req, res) => {
     } else {
       res.json(results);
     }
+  });
+};
+
+//get InternationalTour by id
+export const showAVGInternationalTourById = (req, res) => {
+  const id = req.params.id;
+  getInternationalAverageRating(id, (err, results) => {
+    if (err) {
+      res.send(err);
+    } else res.json(results);
   });
 };

@@ -7,8 +7,11 @@ import {
 
 import {
   addTrek,
+  addTrekRating,
+  getTrekAverageRating,
   getTrekById,
   getTrekCount,
+  getTrekRatings,
   getTreks,
 } from "../models/treks.js";
 
@@ -92,6 +95,50 @@ export const showTrekFileById = (req, res) => {
   const id = req.params.id;
   console.log(id);
   getTrekFileById(id, (err, results) => {
+    if (err) {
+      res.send(err);
+    } else res.json(results);
+  });
+};
+
+
+
+//add rating to tour
+export const createTrekRating = (req, res) => {
+  const { rating, id } = req.body;
+  const data = req.body;
+  console.log(data);
+  console.log(rating);
+
+  console.log(id);
+  addTrekRating(rating, id, (err, results) => {
+    if (err) {
+      res.send(err);
+      res.status(500)
+    } else {
+      res.json(results);
+      res.status(200)
+    }
+  });
+};
+
+
+//get all ratings
+export const showTrekRatings = (req, res) => {
+  getTrekRatings((err, results) => {
+    if (err) {
+      res.send(err);
+    } else {
+      res.json(results);
+    }
+  });
+};
+
+
+//get InternationalTour by id
+export const showAVGTrekById = (req, res) => {
+  const id = req.params.id;
+  getTrekAverageRating(id, (err, results) => {
     if (err) {
       res.send(err);
     } else res.json(results);

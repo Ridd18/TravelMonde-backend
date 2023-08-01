@@ -51,3 +51,45 @@ export const addCamping = (data, result) => {
     });
   };
    
+
+  
+//add rating
+export const addCampRating = (rating, id, result) => {
+  const sql = "INSERT INTO camprating (rating, camping_id) VALUES (?, ?)";
+  db.query(sql, [rating, id], (err, results) => {
+    if (err) {
+      console.error("Error inserting rating:", err);
+      result(err, null);
+    } else {
+      result(null, results);
+    }
+  });
+};
+
+// get all rating
+export const getCampRatings = (result) => {
+  db.query("select * from camprating", (err, results) => {
+    if (err) {
+      console.log(err);
+      result(err, null);
+    } else {
+      result(null, results);
+    }
+  });
+};
+
+// get avg rating
+export const getCampAverageRating = (id, result) => {
+  db.query(
+    "select AVG(rating) as avg_rating from camprating WHERE camping_id = ?",
+    [id],
+    (err, results) => {
+      if (err) {
+        console.log(err);
+        result(err, null);
+      } else {
+        result(null, results[0]);
+      }
+    }
+  );
+};

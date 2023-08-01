@@ -1,6 +1,7 @@
 
 import { getNationalFileByFileName, getNationalFileById, getNationalFileCount, getNationalIdByFileName } from "../fileUploads/nationalFiles.js";
-import { addNationalTour, getNationalTourById, getNationalTourCount, getNationalTours } from "../models/nationalTours.js";
+import { getInternationalAverageRating } from "../models/internationalTours.js";
+import { addNationalRating, addNationalTour, getNationalRatings, getNationalTourById, getNationalTourCount, getNationalTours } from "../models/nationalTours.js";
 
 
   //get all NationalTour
@@ -85,6 +86,47 @@ export const showNationalFileById = (req, res) => {
   const id = req.params.id;
   console.log(id);
   getNationalFileById(id, (err, results) => {
+    if (err) {
+      res.send(err);
+    } else res.json(results);
+  });
+};
+
+
+//add rating to tour
+export const createNationalRating = (req, res) => {
+  const { rating, id } = req.body;
+  const data = req.body;
+  console.log(data);
+  console.log(rating);
+
+  console.log(id);
+  addNationalRating(rating, id, (err, results) => {
+    if (err) {
+      res.send(err);
+      res.status(500);
+    } else {
+      res.json(results);
+      res.status(200);
+    }
+  });
+};
+
+//get all ratings
+export const showNationalRatings = (req, res) => {
+  getNationalRatings((err, results) => {
+    if (err) {
+      res.send(err);
+    } else {
+      res.json(results);
+    }
+  });
+};
+
+//get InternationalTour by id
+export const showAVGNationalTourById = (req, res) => {
+  const id = req.params.id;
+  getInternationalAverageRating(id, (err, results) => {
     if (err) {
       res.send(err);
     } else res.json(results);
