@@ -1,40 +1,49 @@
+import {
+  getInternationalFileByFileName,
+  getInternationalFileById,
+  getInternationalFileCount,
+  getInternationalIdByFileName,
+} from "../fileUploads/internationalFiles.js";
+import {
+  addInternationalRating,
+  addInternationalTour,
+  getInternationalRatings,
+  getInternationalTourById,
+  getInternationalTourCount,
+  getInternationalTours,
+} from "../models/internationalTours.js";
 
-import { getInternationalFileByFileName, getInternationalFileById, getInternationalFileCount, getInternationalIdByFileName } from "../fileUploads/internationalFiles.js";
-import { addInternationalTour, getInternationalTourById, getInternationalTourCount, getInternationalTours } from "../models/internationalTours.js";
+//get all InternationalTour
+export const showInternationalTours = (req, res) => {
+  getInternationalTours((err, results) => {
+    if (err) {
+      res.send(err);
+    } else {
+      res.json(results);
+    }
+  });
+};
 
+//get InternationalTour count
+export const InternationalTourCount = (req, res) => {
+  getInternationalTourCount((err, results) => {
+    if (err) {
+      res.send(err);
+    } else {
+      res.json(results);
+    }
+  });
+};
 
-  //get all InternationalTour
-  export const showInternationalTours = (req, res) => {
-    getInternationalTours((err, results) => {
-      if (err) {
-        res.send(err);
-      } else {
-        res.json(results);
-      }
-    });
-  };
-
-    //get InternationalTour count
-    export const InternationalTourCount = (req, res) => {
-      getInternationalTourCount((err, results) => {
-        if (err) {
-          res.send(err);
-        } else {
-          res.json(results);
-        }
-      });
-    };
-  
-  //get InternationalTour by id
-  export const showInternationalTourById = (req, res) => {
-    const id = req.params.id;
-    getInternationalTourById(id, (err, results) => {
-      if (err) {
-        res.send(err);
-      } else res.json(results);
-    });
-  };
-
+//get InternationalTour by id
+export const showInternationalTourById = (req, res) => {
+  const id = req.params.id;
+  getInternationalTourById(id, (err, results) => {
+    if (err) {
+      res.send(err);
+    } else res.json(results);
+  });
+};
 
 //add InternationalTour
 export const createInternationalTour = (req, res) => {
@@ -48,7 +57,6 @@ export const createInternationalTour = (req, res) => {
   });
 };
 
-
 //get International id by International name
 export const showInternationalTourIdByFilename = (req, res) => {
   const name = req.params.name;
@@ -58,7 +66,6 @@ export const showInternationalTourIdByFilename = (req, res) => {
     } else res.json(results);
   });
 };
-
 
 //get International by International name
 export const showInternationalTourByInternationalName = (req, res) => {
@@ -84,10 +91,41 @@ export const InternationalFileCount = (req, res) => {
 //get International by International name
 export const showInternationalTourFileById = (req, res) => {
   const id = req.params.id;
-  console.log(id)
+  console.log(id);
   getInternationalFileById(id, (err, results) => {
     if (err) {
       res.send(err);
     } else res.json(results);
+  });
+};
+
+//add rating to tour
+export const createInternationalRating = (req, res) => {
+  const { rating, id } = req.body;
+  const data = req.body;
+  console.log(data);
+  console.log(rating);
+
+  console.log(id);
+  addInternationalRating(rating, id, (err, results) => {
+    if (err) {
+      res.send(err);
+      res.status(500)
+    } else {
+      res.json(results);
+      res.status(200)
+    }
+  });
+};
+
+
+//get all ratings
+export const showInternationalRatings = (req, res) => {
+  getInternationalRatings((err, results) => {
+    if (err) {
+      res.send(err);
+    } else {
+      res.json(results);
+    }
   });
 };

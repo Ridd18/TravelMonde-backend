@@ -1,6 +1,9 @@
 // import express
 import express from "express";
 
+//db
+import db from "../util/database.js";
+
 // const User = require("../models/user.js")
 import {
   createUser,
@@ -50,6 +53,8 @@ import {
   showInternationalTourIdByFilename,
   InternationalFileCount,
   showInternationalTourFileById,
+  createInternationalRating,
+  showInternationalRatings,
 } from "../controllers/internationalTourController.js";
 
 import { upload, getListFiles, download } from "../fileUploads/trekFiles.js";
@@ -264,5 +269,45 @@ router.get(
 
 //get tour file by id
 router.get("/internationalTour/fileById/:id", showInternationalTourFileById);
+
+
+//ratinggg
+
+router.get('/internationalTour/ratings/:itemID', (req, res) => {
+  const itemID = req.params.itemID;
+  const sql = 'SELECT AVG(rating) as avg_rating FROM internationalrating WHERE international_id = ?';
+  db.query(sql, [itemID], (err, result) => {
+    if (err) {
+      console.error('Error fetching average rating:', err);
+      res.status(500).json({ error: 'Error fetching average rating' });
+    } else {
+      res.status(200).json({ averageRating: result[0].avg_rating });
+    }
+  });
+});
+
+//add ratings
+router.post('/internationalTour/addrating',createInternationalRating)
+
+//get all ratings
+router.get("/internationalTour/ratings", showInternationalRatings);
+
+// router.post('/internationalTour/addratings', (req, res) => {
+//   const { rating, id } = req.body;
+//   const data = req.body
+//   console.log(data)
+//   console.log(rating)
+
+//   console.log(id)
+//   const sql = 'INSERT INTO rating (rating, international_id) VALUES (?, ?)';
+//   db.query(sql, [rating, id], (err, result) => {
+//     if (err) {
+//       console.error('Error inserting rating:', err);
+//       res.status(500).json({ error: 'Error inserting rating' });
+//     } else {
+//       res.status(200).json({ success: true });
+//     }
+//   });
+// });
 
 export default router;
