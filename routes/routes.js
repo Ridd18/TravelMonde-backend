@@ -348,4 +348,42 @@ router.get("/feedback/:id", showFeedbackById);
 //delete feedback
 router.delete("/feedback/delete/:id", deleteFeedback);
 
+//PAYMENTSS
+
+import { stripeConfig } from "../payments/payment.js";
+
+router.post("/create-payment-intent", async (req, res) => {
+  const { amount } = req.body;
+
+  const paymentData = {
+    user_id: 1, // Assuming you have a user ID
+    amount: amount,
+    payment_date: new Date(),
+  };
+
+  try {
+    db.query("INSERT INTO payments SET ?", paymentData, (err, result) => {
+      if (err) {
+        console.error("Error creating payment:", err);
+      } else {
+        console.log("Payment created:", result);
+      }
+    });
+
+    const paymentIntent = await stripeConfig.paymentIntents.create({
+      amount: amount, // Amount in cents
+      currency: "usd",
+    });
+
+    res.status(200).json({ clientSecret: paymentIntent.client_secret });
+    console.log(amount);
+    // console.log(res)
+  } catch (err) {
+    console.error(err);
+    res
+      .status(500)
+      .json({ error: "An error occurred while creating payment intent." });
+  }
+});
+
 export default router;
