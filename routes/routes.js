@@ -353,6 +353,10 @@ router.delete("/feedback/delete/:id", deleteFeedback);
 import { stripeConfig } from "../payments/payment.js";
 
 router.post("/create-payment-intent", async (req, res) => {
+
+  const data = req.body
+  console.log(data);
+
   const { amount } = req.body;
 
   const paymentData = {
@@ -372,7 +376,9 @@ router.post("/create-payment-intent", async (req, res) => {
 
     const paymentIntent = await stripeConfig.paymentIntents.create({
       amount: amount, // Amount in cents
-      currency: "usd",
+      currency: "inr",
+      payment_method_types: ['card'],
+   
     });
 
     res.status(200).json({ clientSecret: paymentIntent.client_secret });
