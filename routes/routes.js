@@ -352,33 +352,48 @@ router.delete("/feedback/delete/:id", deleteFeedback);
 
 import { stripeConfig } from "../payments/payment.js";
 
-router.post("/create-payment-intent", async (req, res) => {
 
-  const data = req.body
+//Trek PAYMENTTT
+router.post("/createTrekPayment", async (req, res) => {
+  const data = req.body;
   console.log(data);
 
   const { amount } = req.body;
 
-  const paymentData = {
-    user_id: 1, // Assuming you have a user ID
-    amount: amount,
-    payment_date: new Date(),
-  };
+  db.query(
+    "select * from treks WHERE price = ?",
+    [amount],
+    (err, res) => {
+      if (err) {
+        console.log("Error selecting from USERS: ", err);
+        // return result(err, null);
+        console.log(res)
+      }
+      const paymentData = {
+        // user_id: 1, // Assuming you have a user ID
+        amount: amount,
+        payment_date: new Date(),
+        trek_id: res[0].trek_id,
+        file_name: res[0].name
+      };
+
+      db.query("INSERT INTO trekPayment Set ?", paymentData, (err, result) => {
+        if (err) {
+          console.error("Error creating payment:", err);
+        } else {
+          console.log("Payment created:", result);
+        }
+      });
+      console.log("created task: ");
+    }
+  );
 
   try {
-    db.query("INSERT INTO payments SET ?", paymentData, (err, result) => {
-      if (err) {
-        console.error("Error creating payment:", err);
-      } else {
-        console.log("Payment created:", result);
-      }
-    });
 
     const paymentIntent = await stripeConfig.paymentIntents.create({
       amount: amount, // Amount in cents
       currency: "inr",
-      payment_method_types: ['card'],
-   
+      payment_method_types: ["card"],
     });
 
     res.status(200).json({ clientSecret: paymentIntent.client_secret });
@@ -391,5 +406,208 @@ router.post("/create-payment-intent", async (req, res) => {
       .json({ error: "An error occurred while creating payment intent." });
   }
 });
+
+
+//Camping PAYMENTTT
+router.post("/createCampPayment", async (req, res) => {
+  const data = req.body;
+  console.log(data);
+
+  const { amount } = req.body;
+
+  db.query(
+    "select * from camping WHERE price = ?",
+    [amount],
+    (err, res) => {
+      if (err) {
+        console.log("Error selecting from USERS: ", err);
+        // return result(err, null);
+        console.log(res)
+      }
+      const paymentData = {
+        // user_id: 1, // Assuming you have a user ID
+        amount: amount,
+        payment_date: new Date(),
+        camping_id: res[0].camping_id,
+        file_name: res[0].name
+      };
+
+      db.query("INSERT INTO campingPayment Set ?", paymentData, (err, result) => {
+        if (err) {
+          console.error("Error creating payment:", err);
+        } else {
+          console.log("Payment created:", result);
+        }
+      });
+      console.log("created task: ");
+    }
+  );
+
+  try {
+
+    const paymentIntent = await stripeConfig.paymentIntents.create({
+      amount: amount, // Amount in cents
+      currency: "inr",
+      payment_method_types: ["card"],
+    });
+
+    res.status(200).json({ clientSecret: paymentIntent.client_secret });
+    console.log(amount);
+    // console.log(res)
+  } catch (err) {
+    console.error(err);
+    res
+      .status(500)
+      .json({ error: "An error occurred while creating payment intent." });
+  }
+});
+
+//national payment
+router.post("/createNationalPayment", async (req, res) => {
+  const data = req.body;
+  console.log(data);
+
+  const { amount } = req.body;
+
+  db.query(
+    "select * from nationalTour WHERE price = ?",
+    [amount],
+    (err, res) => {
+      if (err) {
+        console.log("Error selecting from USERS: ", err);
+        // return result(err, null);
+        console.log(res)
+      }
+      const paymentData = {
+        // user_id: 1, // Assuming you have a user ID
+        amount: amount,
+        payment_date: new Date(),
+        national_id: res[0].national_id,
+        file_name: res[0].name
+      };
+
+      db.query("INSERT INTO nationalPayment Set ?", paymentData, (err, result) => {
+        if (err) {
+          console.error("Error creating payment:", err);
+        } else {
+          console.log("Payment created:", result);
+        }
+      });
+      console.log("created task: ");
+    }
+  );
+
+  try {
+
+    const paymentIntent = await stripeConfig.paymentIntents.create({
+      amount: amount, // Amount in cents
+      currency: "inr",
+      payment_method_types: ["card"],
+    });
+
+    res.status(200).json({ clientSecret: paymentIntent.client_secret });
+    console.log(amount);
+    // console.log(res)
+  } catch (err) {
+    console.error(err);
+    res
+      .status(500)
+      .json({ error: "An error occurred while creating payment intent." });
+  }
+});
+
+//international payment
+router.post("/createInternationalPayment", async (req, res) => {
+  const data = req.body;
+  console.log(data);
+
+  const { amount } = req.body;
+
+  db.query(
+    "select * from internationalTour WHERE price = ?",
+    [amount],
+    (err, res) => {
+      if (err) {
+        console.log("Error selecting from USERS: ", err);
+        // return result(err, null);
+        console.log(res)
+      }
+      const paymentData = {
+        // user_id: 1, // Assuming you have a user ID
+        amount: amount,
+        payment_date: new Date(),
+        international_id: res[0].international_id,
+        file_name: res[0].name
+      };
+
+      db.query("INSERT INTO internationalPayment Set ?", paymentData, (err, result) => {
+        if (err) {
+          console.error("Error creating payment:", err);
+        } else {
+          console.log("Payment created:", result);
+        }
+      });
+      console.log("created task: ");
+    }
+  );
+
+  try {
+
+    const paymentIntent = await stripeConfig.paymentIntents.create({
+      amount: amount, // Amount in cents
+      currency: "inr",
+      payment_method_types: ["card"],
+    });
+
+    res.status(200).json({ clientSecret: paymentIntent.client_secret });
+    console.log(amount);
+    // console.log(res)
+  } catch (err) {
+    console.error(err);
+    res
+      .status(500)
+      .json({ error: "An error occurred while creating payment intent." });
+  }
+});
+
+// router.post("/create-payment-intent", async (req, res) => {
+
+//   const data = req.body
+//   console.log(data);
+
+//   const { amount } = req.body;
+
+//   const paymentData = {
+//     user_id: 1, // Assuming you have a user ID
+//     amount: amount,
+//     payment_date: new Date(),
+//   };
+
+//   try {
+//     db.query("INSERT INTO payments SET ?", paymentData, (err, result) => {
+//       if (err) {
+//         console.error("Error creating payment:", err);
+//       } else {
+//         console.log("Payment created:", result);
+//       }
+//     });
+
+//     const paymentIntent = await stripeConfig.paymentIntents.create({
+//       amount: amount, // Amount in cents
+//       currency: "inr",
+//       payment_method_types: ['card'],
+
+//     });
+
+//     res.status(200).json({ clientSecret: paymentIntent.client_secret });
+//     console.log(amount);
+//     // console.log(res)
+//   } catch (err) {
+//     console.error(err);
+//     res
+//       .status(500)
+//       .json({ error: "An error occurred while creating payment intent." });
+//   }
+// });
 
 export default router;
