@@ -105,3 +105,18 @@ export const getNationalAverageRatings = (result) => {
     }
   );
 };
+
+export const getSumOfNationalPayments= (result)=> {
+  db.query(
+    "select SUM(amount) as NationalSum from nationalpayment",
+
+    (err, results) => {
+      if (err) {
+        console.log(err);
+        result(err, null);
+      } else {
+        result(null, results);
+      }
+    }
+  );
+}

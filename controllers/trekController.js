@@ -8,6 +8,7 @@ import {
 import {
   addTrek,
   addTrekRating,
+  getSumOfTrekPayments,
   getTrekAverageRating,
   getTrekAverageRatings,
   getTrekById,
@@ -145,6 +146,15 @@ export const showAVGTrekById = (req, res) => {
 //get all trek avg
 export const showAllAVGTrek = (req, res) => {
   getTrekAverageRatings((err, results) => {
+    if (err) {
+      res.send(err);
+    } else res.json(results);
+  });
+};
+
+//get sum of trek  payments
+export const showTrekPayments = (req, res) => {
+  getSumOfTrekPayments((err, results) => {
     if (err) {
       res.send(err);
     } else res.json(results);

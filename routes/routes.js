@@ -28,6 +28,7 @@ import {
   showTrekRatings,
   createTrekRating,
   showAllAVGTrek,
+  showTrekPayments,
 } from "../controllers/trekController.js";
 import {
   CampingCount,
@@ -39,6 +40,7 @@ import {
   showCampByCampName,
   showCampFileById,
   showCampIdByFilename,
+  showCampPayments,
   showCampRatings,
   showCampingById,
   showCampings,
@@ -52,6 +54,7 @@ import {
   showAllAVGnational,
   showNationalFileById,
   showNationalIdByFilename,
+  showNationalPayments,
   showNationalRatings,
   showNationalTourById,
   showNationalTourByNationalName,
@@ -69,6 +72,7 @@ import {
   showInternationalRatings,
   showAVGInternationalTourById,
   showAllAVGInternational,
+  showInternationalPayments,
 } from "../controllers/internationalTourController.js";
 
 import { upload, getListFiles, download } from "../fileUploads/trekFiles.js";
@@ -177,6 +181,12 @@ router.post("/trek/addrating", createTrekRating);
 //get all ratings
 router.get("/trekRatings", showTrekRatings);
 
+//PAYMENTS
+
+//get sum of payments
+router.get("/trekSumPayments", showTrekPayments)
+
+
 //CAMPINGS
 
 //add camping
@@ -229,6 +239,13 @@ router.post("/camping/addrating", createCampRating);
 
 //get all ratings
 router.get("/campingRatings", showCampRatings);
+
+//PAYMENTS
+
+//get sum of payments
+router.get("/campingSumPayments", showCampPayments)
+
+
 
 //NATIONAL TOUR
 
@@ -286,6 +303,13 @@ router.post("/nationalTour/addrating", createNationalRating);
 
 //get all ratings
 router.get("/nationalTourRatings", showNationalRatings);
+
+//PAYMENTS
+
+//get sum of payments
+router.get("/nationalTourSumPayments", showNationalPayments)
+
+
 
 //INTERNATIONAL TOURS
 
@@ -347,6 +371,13 @@ router.post("/internationalTour/addrating", createInternationalRating);
 //get all ratings
 router.get("/internationalTourRatings", showInternationalRatings);
 
+//PAYMENTS
+
+//get sum of payments
+router.get("/internationalTourSumPayments", showInternationalPayments)
+
+
+
 //FEEDBACK
 
 //add feedback
@@ -363,6 +394,8 @@ router.get("/feedback/:id", showFeedbackById);
 
 //delete feedback
 router.delete("/feedback/delete/:id", deleteFeedback);
+
+
 
 //PAYMENTSS
 

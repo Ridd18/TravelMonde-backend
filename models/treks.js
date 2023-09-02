@@ -103,3 +103,19 @@ export const getTrekAverageRatings = (result) => {
     }
   );
 };
+
+
+export const getSumOfTrekPayments= (result)=> {
+  db.query(
+    "select SUM(amount) as TrekSum from trekpayment",
+
+    (err, results) => {
+      if (err) {
+        console.log(err);
+        result(err, null);
+      } else {
+        result(null, results);
+      }
+    }
+  );
+}

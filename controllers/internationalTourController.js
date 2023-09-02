@@ -12,7 +12,8 @@ import {
   getInternationalTourById,
   getInternationalTourCount,
   getInternationalTours,
-  getInternationalAverageRatings
+  getInternationalAverageRatings,
+  getSumOfInternationalPayments
 } from "../models/internationalTours.js";
 
 //get all InternationalTour
@@ -150,3 +151,12 @@ export const showAllAVGInternational = (req, res) => {
   });
 };
 
+
+//get sum of international payments
+export const showInternationalPayments = (req, res) => {
+  getSumOfInternationalPayments((err, results) => {
+    if (err) {
+      res.send(err);
+    } else res.json(results);
+  });
+};

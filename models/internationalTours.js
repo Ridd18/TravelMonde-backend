@@ -109,3 +109,18 @@ export const getInternationalAverageRatings = (result) => {
     }
   );
 };
+
+export const getSumOfInternationalPayments= (result)=> {
+  db.query(
+    "select SUM(amount) as InternationalSum from internationalpayment",
+
+    (err, results) => {
+      if (err) {
+        console.log(err);
+        result(err, null);
+      } else {
+        result(null, results);
+      }
+    }
+  );
+}

@@ -108,3 +108,18 @@ export const getCampAverageRatings = (result) => {
     }
   );
 };
+
+export const getSumOfCampPayments= (result)=> {
+  db.query(
+    "select SUM(amount) as CampingSum from campingpayment",
+
+    (err, results) => {
+      if (err) {
+        console.log(err);
+        result(err, null);
+      } else {
+        result(null, results);
+      }
+    }
+  );
+}
