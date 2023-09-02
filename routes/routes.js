@@ -27,6 +27,7 @@ import {
   showAVGTrekById,
   showTrekRatings,
   createTrekRating,
+  showAllAVGTrek,
 } from "../controllers/trekController.js";
 import {
   CampingCount,
@@ -34,6 +35,7 @@ import {
   createCampRating,
   createCamping,
   showAVGCampById,
+  showAllAVGCamping,
   showCampByCampName,
   showCampFileById,
   showCampIdByFilename,
@@ -47,6 +49,7 @@ import {
   createNationalRating,
   createNationalTour,
   showAVGNationalTourById,
+  showAllAVGnational,
   showNationalFileById,
   showNationalIdByFilename,
   showNationalRatings,
@@ -65,6 +68,7 @@ import {
   createInternationalRating,
   showInternationalRatings,
   showAVGInternationalTourById,
+  showAllAVGInternational,
 } from "../controllers/internationalTourController.js";
 
 import { upload, getListFiles, download } from "../fileUploads/trekFiles.js";
@@ -164,6 +168,9 @@ router.get("/trek/fileById/:id", showTrekFileById);
 //avg rating
 router.get("/trek/ratings/:id", showAVGTrekById);
 
+//all avg rating
+router.get("/trekAVGratings", showAllAVGTrek);
+
 //add ratings
 router.post("/trek/addrating", createTrekRating);
 
@@ -213,6 +220,9 @@ router.get("/camping/fileById/:id", showCampFileById);
 
 //avg rating
 router.get("/camping/ratings/:id", showAVGCampById);
+
+//all avg rating
+router.get("/campingAVGratings", showAllAVGCamping);
 
 //add ratings
 router.post("/camping/addrating", createCampRating);
@@ -267,6 +277,9 @@ router.get("/nationalTour/fileById/:id", showNationalFileById);
 
 //avg rating
 router.get("/nationalTour/ratings/:id", showAVGNationalTourById);
+
+//all avg rating
+router.get("/nationalTourAVGratings", showAllAVGnational);
 
 //add ratings
 router.post("/nationalTour/addrating", createNationalRating);
@@ -325,6 +338,9 @@ router.get("/internationalTour/fileById/:id", showInternationalTourFileById);
 //avg rating
 router.get("/internationalTour/ratings/:id", showAVGInternationalTourById);
 
+//all avg rating
+router.get("/internationalTourAVGratings", showAllAVGInternational);
+
 //add ratings
 router.post("/internationalTour/addrating", createInternationalRating);
 
@@ -360,9 +376,11 @@ router.post("/createTrekPayment", async (req, res) => {
 
   const { amount } = req.body;
 
+  const amountInRupees = amount/100;
+
   db.query(
     "select * from treks WHERE price = ?",
-    [amount],
+    [amountInRupees],
     (err, res) => {
       if (err) {
         console.log("Error selecting from USERS: ", err);
@@ -371,7 +389,7 @@ router.post("/createTrekPayment", async (req, res) => {
       }
       const paymentData = {
         // user_id: 1, // Assuming you have a user ID
-        amount: amount,
+        amount: amountInRupees,
         payment_date: new Date(),
         trek_id: res[0].trek_id,
         file_name: res[0].name
@@ -415,9 +433,11 @@ router.post("/createCampPayment", async (req, res) => {
 
   const { amount } = req.body;
 
+  const amountInRupees = amount/100;
+
   db.query(
     "select * from camping WHERE price = ?",
-    [amount],
+    [amountInRupees],
     (err, res) => {
       if (err) {
         console.log("Error selecting from USERS: ", err);
@@ -426,7 +446,7 @@ router.post("/createCampPayment", async (req, res) => {
       }
       const paymentData = {
         // user_id: 1, // Assuming you have a user ID
-        amount: amount,
+        amount: amountInRupees,
         payment_date: new Date(),
         camping_id: res[0].camping_id,
         file_name: res[0].name
@@ -469,18 +489,23 @@ router.post("/createNationalPayment", async (req, res) => {
 
   const { amount } = req.body;
 
+  const amountInRupees = amount/100;
+
   db.query(
     "select * from nationalTour WHERE price = ?",
-    [amount],
+    [amountInRupees],
     (err, res) => {
       if (err) {
         console.log("Error selecting from USERS: ", err);
         // return result(err, null);
         console.log(res)
       }
+
+      const amountInRupees = amount/100;
+
       const paymentData = {
         // user_id: 1, // Assuming you have a user ID
-        amount: amount,
+        amount: amountInRupees,
         payment_date: new Date(),
         national_id: res[0].national_id,
         file_name: res[0].name
@@ -523,9 +548,11 @@ router.post("/createInternationalPayment", async (req, res) => {
 
   const { amount } = req.body;
 
+  const amountInRupees = amount/100;
+
   db.query(
     "select * from internationalTour WHERE price = ?",
-    [amount],
+    [amountInRupees],
     (err, res) => {
       if (err) {
         console.log("Error selecting from USERS: ", err);
@@ -534,7 +561,7 @@ router.post("/createInternationalPayment", async (req, res) => {
       }
       const paymentData = {
         // user_id: 1, // Assuming you have a user ID
-        amount: amount,
+        amount: amountInRupees,
         payment_date: new Date(),
         international_id: res[0].international_id,
         file_name: res[0].name

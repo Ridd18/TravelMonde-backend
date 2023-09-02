@@ -56,7 +56,7 @@ export const addInternationalTour = (data, result) => {
 
 //add rating
 export const addInternationalRating = (rating, id, result) => {
-  const sql = "INSERT INTO rating (rating, international_id) VALUES (?, ?)";
+  const sql = "INSERT INTO internationalrating (rating, international_id) VALUES (?, ?)";
   db.query(sql, [rating, id], (err, results) => {
     if (err) {
       console.error("Error inserting rating:", err);
@@ -90,6 +90,21 @@ export const getInternationalAverageRating = (id, result) => {
         result(err, null);
       } else {
         result(null, results[0]);
+      }
+    }
+  );
+};
+
+// get avg ratings
+export const getInternationalAverageRatings = (result) => {
+  db.query(
+    "SELECT international_id, avg(rating) as avg FROM internationalrating GROUP BY international_id order by international_id",
+    (err, results) => {
+      if (err) {
+        console.log(err);
+        result(err, null);
+      } else {
+        result(null, results);
       }
     }
   );

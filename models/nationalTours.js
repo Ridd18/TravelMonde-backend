@@ -90,3 +90,18 @@ export const getNationalAverageRating = (id, result) => {
     }
   );
 };
+
+// get avg ratings
+export const getNationalAverageRatings = (result) => {
+  db.query(
+    "SELECT national_id, avg(rating) as avg FROM nationalrating GROUP BY national_id order by national_id",
+    (err, results) => {
+      if (err) {
+        console.log(err);
+        result(err, null);
+      } else {
+        result(null, results);
+      }
+    }
+  );
+};

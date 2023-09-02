@@ -9,6 +9,7 @@ import {
   addTrek,
   addTrekRating,
   getTrekAverageRating,
+  getTrekAverageRatings,
   getTrekById,
   getTrekCount,
   getTrekRatings,
@@ -101,8 +102,6 @@ export const showTrekFileById = (req, res) => {
   });
 };
 
-
-
 //add rating to tour
 export const createTrekRating = (req, res) => {
   const { rating, id } = req.body;
@@ -114,14 +113,13 @@ export const createTrekRating = (req, res) => {
   addTrekRating(rating, id, (err, results) => {
     if (err) {
       res.send(err);
-      res.status(500)
+      res.status(500);
     } else {
       res.json(results);
-      res.status(200)
+      res.status(200);
     }
   });
 };
-
 
 //get all ratings
 export const showTrekRatings = (req, res) => {
@@ -134,11 +132,19 @@ export const showTrekRatings = (req, res) => {
   });
 };
 
-
 //get InternationalTour by id
 export const showAVGTrekById = (req, res) => {
   const id = req.params.id;
   getTrekAverageRating(id, (err, results) => {
+    if (err) {
+      res.send(err);
+    } else res.json(results);
+  });
+};
+
+//get all trek avg
+export const showAllAVGTrek = (req, res) => {
+  getTrekAverageRatings((err, results) => {
     if (err) {
       res.send(err);
     } else res.json(results);

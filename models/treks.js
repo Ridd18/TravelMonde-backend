@@ -88,3 +88,18 @@ export const getTrekAverageRating = (id, result) => {
     }
   );
 };
+
+// get avg ratings
+export const getTrekAverageRatings = (result) => {
+  db.query(
+    "SELECT trek_id, avg(rating) as avg FROM trekrating GROUP BY trek_id order by trek_id",
+    (err, results) => {
+      if (err) {
+        console.log(err);
+        result(err, null);
+      } else {
+        result(null, results);
+      }
+    }
+  );
+};

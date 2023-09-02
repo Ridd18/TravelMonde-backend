@@ -93,3 +93,18 @@ export const getCampAverageRating = (id, result) => {
     }
   );
 };
+
+// get avg ratings
+export const getCampAverageRatings = (result) => {
+  db.query(
+    "SELECT camping_id, avg(rating) as avg FROM camprating GROUP BY camping_id order by camping_id",
+    (err, results) => {
+      if (err) {
+        console.log(err);
+        result(err, null);
+      } else {
+        result(null, results);
+      }
+    }
+  );
+};

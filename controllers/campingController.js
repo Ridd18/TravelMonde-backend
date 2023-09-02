@@ -1,5 +1,5 @@
 
-import { addCampRating, addCamping, getCampAverageRating, getCampRatings, getCampingById, getCampingCount, getCampings } from "../models/campings.js";
+import { addCampRating, addCamping, getCampAverageRating, getCampAverageRatings, getCampRatings, getCampingById, getCampingCount, getCampings } from "../models/campings.js";
 
 import { getCampFileByFileName, getCampFileById, getCampFileCount, getCampIdByFileName } from "../fileUploads/campFiles.js"
 
@@ -126,6 +126,16 @@ export const showCampRatings = (req, res) => {
 export const showAVGCampById = (req, res) => {
   const id = req.params.id;
   getCampAverageRating(id, (err, results) => {
+    if (err) {
+      res.send(err);
+    } else res.json(results);
+  });
+};
+
+
+//get all camping avg ratings
+export const showAllAVGCamping = (req, res) => {
+  getCampAverageRatings((err, results) => {
     if (err) {
       res.send(err);
     } else res.json(results);

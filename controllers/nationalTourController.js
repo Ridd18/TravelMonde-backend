@@ -1,7 +1,7 @@
 
 import { getNationalFileByFileName, getNationalFileById, getNationalFileCount, getNationalIdByFileName } from "../fileUploads/nationalFiles.js";
 import { getInternationalAverageRating } from "../models/internationalTours.js";
-import { addNationalRating, addNationalTour, getNationalRatings, getNationalTourById, getNationalTourCount, getNationalTours } from "../models/nationalTours.js";
+import { addNationalRating, addNationalTour, getNationalAverageRatings, getNationalRatings, getNationalTourById, getNationalTourCount, getNationalTours } from "../models/nationalTours.js";
 
 
   //get all NationalTour
@@ -127,6 +127,15 @@ export const showNationalRatings = (req, res) => {
 export const showAVGNationalTourById = (req, res) => {
   const id = req.params.id;
   getInternationalAverageRating(id, (err, results) => {
+    if (err) {
+      res.send(err);
+    } else res.json(results);
+  });
+};
+
+//get all trek avg
+export const showAllAVGnational = (req, res) => {
+  getNationalAverageRatings((err, results) => {
     if (err) {
       res.send(err);
     } else res.json(results);

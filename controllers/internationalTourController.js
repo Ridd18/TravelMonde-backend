@@ -12,6 +12,7 @@ import {
   getInternationalTourById,
   getInternationalTourCount,
   getInternationalTours,
+  getInternationalAverageRatings
 } from "../models/internationalTours.js";
 
 //get all InternationalTour
@@ -139,3 +140,13 @@ export const showAVGInternationalTourById = (req, res) => {
     } else res.json(results);
   });
 };
+
+//get all trek avg
+export const showAllAVGInternational = (req, res) => {
+  getInternationalAverageRatings((err, results) => {
+    if (err) {
+      res.send(err);
+    } else res.json(results);
+  });
+};
+
