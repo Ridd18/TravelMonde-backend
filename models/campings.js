@@ -97,7 +97,7 @@ export const getCampAverageRating = (id, result) => {
 // get avg ratings
 export const getCampAverageRatings = (result) => {
   db.query(
-    "SELECT camping_id, avg(rating) as avg FROM camprating GROUP BY camping_id order by camping_id",
+    "SELECT camping_name, avg(rating) as avg FROM camprating GROUP BY camping_name order by camping_name",
     (err, results) => {
       if (err) {
         console.log(err);

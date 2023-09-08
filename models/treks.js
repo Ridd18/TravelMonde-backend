@@ -48,7 +48,7 @@ export const addTrek = (data, result) => {
 };
 
 
-
+//add trek rating
 export const addTrekRating = (rating, id, result) => {
   const sql = "INSERT INTO trekrating (rating, trek_id) VALUES (?, ?)";
   db.query(sql, [rating, id], (err, results) => {
@@ -60,6 +60,8 @@ export const addTrekRating = (rating, id, result) => {
     }
   });
 };
+
+
 
 // get all rating
 export const getTrekRatings = (result) => {
@@ -92,7 +94,8 @@ export const getTrekAverageRating = (id, result) => {
 // get avg ratings
 export const getTrekAverageRatings = (result) => {
   db.query(
-    "SELECT trek_id, avg(rating) as avg FROM trekrating GROUP BY trek_id order by trek_id",
+    "SELECT trek_name, avg(rating) as avg FROM trekrating GROUP BY trek_name order by trek_name",
+    // "SELECT trek_id,trek_name, avg(rating) as avg FROM trekrating GROUP BY trek_id order by trek_id",
     (err, results) => {
       if (err) {
         console.log(err);
@@ -108,6 +111,21 @@ export const getTrekAverageRatings = (result) => {
 export const getSumOfTrekPayments= (result)=> {
   db.query(
     "select SUM(amount) as TrekSum from trekpayment",
+
+    (err, results) => {
+      if (err) {
+        console.log(err);
+        result(err, null);
+      } else {
+        result(null, results);
+      }
+    }
+  );
+}
+
+export const getSuccessfulTrek= (result)=> {
+  db.query(
+    "SELECT trek_name, AVG(rating) AS avg_rating FROM trekrating GROUP BY trek_name HAVING AVG(rating) = (SELECT MAX(avg_rating) FROM (SELECT AVG(rating) AS avg_rating FROM trekrating GROUP BY trek_name) AS subquery);",
 
     (err, results) => {
       if (err) {

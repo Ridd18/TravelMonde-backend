@@ -98,7 +98,7 @@ export const getInternationalAverageRating = (id, result) => {
 // get avg ratings
 export const getInternationalAverageRatings = (result) => {
   db.query(
-    "SELECT international_id, avg(rating) as avg FROM internationalrating GROUP BY international_id order by international_id",
+    "SELECT international_name, avg(rating) as avg FROM internationalrating GROUP BY international_name order by international_name",
     (err, results) => {
       if (err) {
         console.log(err);

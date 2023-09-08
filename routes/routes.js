@@ -29,6 +29,7 @@ import {
   createTrekRating,
   showAllAVGTrek,
   showTrekPayments,
+  showSuccessfulTrek,
 } from "../controllers/trekController.js";
 import {
   CampingCount,
@@ -176,16 +177,18 @@ router.get("/trek/ratings/:id", showAVGTrekById);
 router.get("/trekAVGratings", showAllAVGTrek);
 
 //add ratings
-router.post("/trek/addrating", createTrekRating);
+// router.post("/trek/addrating", createTrekRating);
 
 //get all ratings
 router.get("/trekRatings", showTrekRatings);
 
+//get successful trek
+router.get("/successfulTrek", showSuccessfulTrek);
+
 //PAYMENTS
 
 //get sum of payments
-router.get("/trekSumPayments", showTrekPayments)
-
+router.get("/trekSumPayments", showTrekPayments);
 
 //CAMPINGS
 
@@ -235,7 +238,7 @@ router.get("/camping/ratings/:id", showAVGCampById);
 router.get("/campingAVGratings", showAllAVGCamping);
 
 //add ratings
-router.post("/camping/addrating", createCampRating);
+// router.post("/camping/addrating", createCampRating);
 
 //get all ratings
 router.get("/campingRatings", showCampRatings);
@@ -243,9 +246,7 @@ router.get("/campingRatings", showCampRatings);
 //PAYMENTS
 
 //get sum of payments
-router.get("/campingSumPayments", showCampPayments)
-
-
+router.get("/campingSumPayments", showCampPayments);
 
 //NATIONAL TOUR
 
@@ -299,7 +300,7 @@ router.get("/nationalTour/ratings/:id", showAVGNationalTourById);
 router.get("/nationalTourAVGratings", showAllAVGnational);
 
 //add ratings
-router.post("/nationalTour/addrating", createNationalRating);
+// router.post("/nationalTour/addrating", createNationalRating);
 
 //get all ratings
 router.get("/nationalTourRatings", showNationalRatings);
@@ -307,9 +308,7 @@ router.get("/nationalTourRatings", showNationalRatings);
 //PAYMENTS
 
 //get sum of payments
-router.get("/nationalTourSumPayments", showNationalPayments)
-
-
+router.get("/nationalTourSumPayments", showNationalPayments);
 
 //INTERNATIONAL TOURS
 
@@ -366,7 +365,7 @@ router.get("/internationalTour/ratings/:id", showAVGInternationalTourById);
 router.get("/internationalTourAVGratings", showAllAVGInternational);
 
 //add ratings
-router.post("/internationalTour/addrating", createInternationalRating);
+// router.post("/internationalTour/addrating", createInternationalRating);
 
 //get all ratings
 router.get("/internationalTourRatings", showInternationalRatings);
@@ -374,9 +373,7 @@ router.get("/internationalTourRatings", showInternationalRatings);
 //PAYMENTS
 
 //get sum of payments
-router.get("/internationalTourSumPayments", showInternationalPayments)
-
-
+router.get("/internationalTourSumPayments", showInternationalPayments);
 
 //FEEDBACK
 
@@ -395,12 +392,9 @@ router.get("/feedback/:id", showFeedbackById);
 //delete feedback
 router.delete("/feedback/delete/:id", deleteFeedback);
 
-
-
 //PAYMENTSS
 
 import { stripeConfig } from "../payments/payment.js";
-
 
 //Trek PAYMENTTT
 router.post("/createTrekPayment", async (req, res) => {
@@ -409,7 +403,7 @@ router.post("/createTrekPayment", async (req, res) => {
 
   const { amount } = req.body;
 
-  const amountInRupees = amount/100;
+  const amountInRupees = amount / 100;
 
   db.query(
     "select * from treks WHERE price = ?",
@@ -418,14 +412,14 @@ router.post("/createTrekPayment", async (req, res) => {
       if (err) {
         console.log("Error selecting from USERS: ", err);
         // return result(err, null);
-        console.log(res)
+        console.log(res);
       }
       const paymentData = {
         // user_id: 1, // Assuming you have a user ID
         amount: amountInRupees,
         payment_date: new Date(),
         trek_id: res[0].trek_id,
-        file_name: res[0].name
+        file_name: res[0].name,
       };
 
       db.query("INSERT INTO trekPayment Set ?", paymentData, (err, result) => {
@@ -440,7 +434,6 @@ router.post("/createTrekPayment", async (req, res) => {
   );
 
   try {
-
     const paymentIntent = await stripeConfig.paymentIntents.create({
       amount: amount, // Amount in cents
       currency: "inr",
@@ -458,7 +451,6 @@ router.post("/createTrekPayment", async (req, res) => {
   }
 });
 
-
 //Camping PAYMENTTT
 router.post("/createCampPayment", async (req, res) => {
   const data = req.body;
@@ -466,7 +458,7 @@ router.post("/createCampPayment", async (req, res) => {
 
   const { amount } = req.body;
 
-  const amountInRupees = amount/100;
+  const amountInRupees = amount / 100;
 
   db.query(
     "select * from camping WHERE price = ?",
@@ -475,29 +467,32 @@ router.post("/createCampPayment", async (req, res) => {
       if (err) {
         console.log("Error selecting from USERS: ", err);
         // return result(err, null);
-        console.log(res)
+        console.log(res);
       }
       const paymentData = {
         // user_id: 1, // Assuming you have a user ID
         amount: amountInRupees,
         payment_date: new Date(),
         camping_id: res[0].camping_id,
-        file_name: res[0].name
+        file_name: res[0].name,
       };
 
-      db.query("INSERT INTO campingPayment Set ?", paymentData, (err, result) => {
-        if (err) {
-          console.error("Error creating payment:", err);
-        } else {
-          console.log("Payment created:", result);
+      db.query(
+        "INSERT INTO campingPayment Set ?",
+        paymentData,
+        (err, result) => {
+          if (err) {
+            console.error("Error creating payment:", err);
+          } else {
+            console.log("Payment created:", result);
+          }
         }
-      });
+      );
       console.log("created task: ");
     }
   );
 
   try {
-
     const paymentIntent = await stripeConfig.paymentIntents.create({
       amount: amount, // Amount in cents
       currency: "inr",
@@ -522,7 +517,7 @@ router.post("/createNationalPayment", async (req, res) => {
 
   const { amount } = req.body;
 
-  const amountInRupees = amount/100;
+  const amountInRupees = amount / 100;
 
   db.query(
     "select * from nationalTour WHERE price = ?",
@@ -531,32 +526,35 @@ router.post("/createNationalPayment", async (req, res) => {
       if (err) {
         console.log("Error selecting from USERS: ", err);
         // return result(err, null);
-        console.log(res)
+        console.log(res);
       }
 
-      const amountInRupees = amount/100;
+      const amountInRupees = amount / 100;
 
       const paymentData = {
         // user_id: 1, // Assuming you have a user ID
         amount: amountInRupees,
         payment_date: new Date(),
         national_id: res[0].national_id,
-        file_name: res[0].name
+        file_name: res[0].name,
       };
 
-      db.query("INSERT INTO nationalPayment Set ?", paymentData, (err, result) => {
-        if (err) {
-          console.error("Error creating payment:", err);
-        } else {
-          console.log("Payment created:", result);
+      db.query(
+        "INSERT INTO nationalPayment Set ?",
+        paymentData,
+        (err, result) => {
+          if (err) {
+            console.error("Error creating payment:", err);
+          } else {
+            console.log("Payment created:", result);
+          }
         }
-      });
+      );
       console.log("created task: ");
     }
   );
 
   try {
-
     const paymentIntent = await stripeConfig.paymentIntents.create({
       amount: amount, // Amount in cents
       currency: "inr",
@@ -581,7 +579,7 @@ router.post("/createInternationalPayment", async (req, res) => {
 
   const { amount } = req.body;
 
-  const amountInRupees = amount/100;
+  const amountInRupees = amount / 100;
 
   db.query(
     "select * from internationalTour WHERE price = ?",
@@ -590,29 +588,32 @@ router.post("/createInternationalPayment", async (req, res) => {
       if (err) {
         console.log("Error selecting from USERS: ", err);
         // return result(err, null);
-        console.log(res)
+        console.log(res);
       }
       const paymentData = {
         // user_id: 1, // Assuming you have a user ID
         amount: amountInRupees,
         payment_date: new Date(),
         international_id: res[0].international_id,
-        file_name: res[0].name
+        file_name: res[0].name,
       };
 
-      db.query("INSERT INTO internationalPayment Set ?", paymentData, (err, result) => {
-        if (err) {
-          console.error("Error creating payment:", err);
-        } else {
-          console.log("Payment created:", result);
+      db.query(
+        "INSERT INTO internationalPayment Set ?",
+        paymentData,
+        (err, result) => {
+          if (err) {
+            console.error("Error creating payment:", err);
+          } else {
+            console.log("Payment created:", result);
+          }
         }
-      });
+      );
       console.log("created task: ");
     }
   );
 
   try {
-
     const paymentIntent = await stripeConfig.paymentIntents.create({
       amount: amount, // Amount in cents
       currency: "inr",
@@ -630,44 +631,184 @@ router.post("/createInternationalPayment", async (req, res) => {
   }
 });
 
-// router.post("/create-payment-intent", async (req, res) => {
+//add rating trekk
+router.post("/addRatingTrek", async (req, res) => {
+  const data = req.body;
+  console.log(data);
 
-//   const data = req.body
-//   console.log(data);
+  const { id, rating } = req.body;
 
-//   const { amount } = req.body;
+  db.query("select * from treks WHERE trek_id = ?", [id], (err, res) => {
+    if (err) {
+      console.log("Error : ", err);
+      // return result(err, null);
+      console.log(res);
+    }
+    const ratingData = {
+      // user_id: 1, // Assuming you have a user ID
 
-//   const paymentData = {
-//     user_id: 1, // Assuming you have a user ID
-//     amount: amount,
-//     payment_date: new Date(),
-//   };
+      trek_id: id,
+      trek_name: res[0].name,
+      rating: rating,
+    };
 
-//   try {
-//     db.query("INSERT INTO payments SET ?", paymentData, (err, result) => {
-//       if (err) {
-//         console.error("Error creating payment:", err);
-//       } else {
-//         console.log("Payment created:", result);
-//       }
-//     });
+    db.query("INSERT INTO trekrating Set ?", ratingData, (err, result) => {
+      if (err) {
+        console.error("Error creating rating:", err);
+      } else {
+        console.log("rating created:", result);
+      }
+    });
+    console.log("created task: ");
+  });
 
-//     const paymentIntent = await stripeConfig.paymentIntents.create({
-//       amount: amount, // Amount in cents
-//       currency: "inr",
-//       payment_method_types: ['card'],
+  try {
+    res.status(200).json();
 
-//     });
+    // console.log(res)
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "An error occurred while creating rating." });
+  }
+});
 
-//     res.status(200).json({ clientSecret: paymentIntent.client_secret });
-//     console.log(amount);
-//     // console.log(res)
-//   } catch (err) {
-//     console.error(err);
-//     res
-//       .status(500)
-//       .json({ error: "An error occurred while creating payment intent." });
-//   }
-// });
+//add rating camping
+router.post("/addRatingCamp", async (req, res) => {
+  const data = req.body;
+  console.log(data);
+
+  const { id, rating } = req.body;
+
+  db.query("select * from camping WHERE camping_id = ?", [id], (err, res) => {
+    if (err) {
+      console.log("Error: ", err);
+      // return result(err, null);
+      console.log(res);
+    }
+    const ratingData = {
+      // user_id: 1, // Assuming you have a user ID
+
+      camping_id: id,
+      camping_name: res[0].name,
+      rating: rating,
+    };
+
+    db.query("INSERT INTO camprating Set ?", ratingData, (err, result) => {
+      if (err) {
+        console.error("Error creating rating:", err);
+      } else {
+        console.log("rating created:", result);
+      }
+    });
+    console.log("created task: ");
+  });
+
+  try {
+    res.status(200).json();
+
+    // console.log(res)
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "An error occurred while creating rating." });
+  }
+});
+
+//add rating national TOur
+router.post("/addRatingNational", async (req, res) => {
+  const data = req.body;
+  console.log(data);
+
+  const { id, rating } = req.body;
+
+  db.query(
+    "select * from nationalTour WHERE national_id = ?",
+    [id],
+    (err, res) => {
+      if (err) {
+        console.log("Error: ", err);
+        // return result(err, null);
+        console.log(res);
+      }
+      const ratingData = {
+        // user_id: 1, // Assuming you have a user ID
+
+        national_id: id,
+        national_name: res[0].name,
+        rating: rating,
+      };
+
+      db.query(
+        "INSERT INTO nationalrating Set ?",
+        ratingData,
+        (err, result) => {
+          if (err) {
+            console.error("Error creating rating:", err);
+          } else {
+            console.log("rating created:", result);
+          }
+        }
+      );
+      console.log("created task: ");
+    }
+  );
+
+  try {
+    res.status(200).json();
+
+    // console.log(res)
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "An error occurred while creating rating." });
+  }
+});
+
+//add rating national TOur
+router.post("/addRatingInternational", async (req, res) => {
+  const data = req.body;
+  console.log(data);
+
+  const { id, rating } = req.body;
+
+  db.query(
+    "select * from internationalTour WHERE international_id = ?",
+    [id],
+    (err, res) => {
+      if (err) {
+        console.log("Error: ", err);
+        // return result(err, null);
+        console.log(res);
+      }
+      const ratingData = {
+        // user_id: 1, // Assuming you have a user ID
+
+        international_id: id,
+        international_name: res[0].name,
+        rating: rating,
+      };
+
+      db.query(
+        "INSERT INTO internationalrating Set ?",
+        ratingData,
+        (err, result) => {
+          if (err) {
+            console.error("Error creating rating:", err);
+          } else {
+            console.log("rating created:", result);
+          }
+        }
+      );
+      console.log("created task: ");
+    }
+  );
+
+  try {
+    res.status(200).json();
+
+    // console.log(res)
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "An error occurred while creating rating." });
+  }
+});
 
 export default router;
