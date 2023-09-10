@@ -124,3 +124,15 @@ export const getSumOfInternationalPayments= (result)=> {
     }
   );
 }
+
+// get all pamyents
+export const getInternationalPayments = (result) => {
+  db.query("select * from internationalpayment", (err, results) => {
+    if (err) {
+      console.log(err);
+      result(err, null);
+    } else {
+      result(null, results);
+    }
+  });
+};

@@ -13,7 +13,8 @@ import {
   getInternationalTourCount,
   getInternationalTours,
   getInternationalAverageRatings,
-  getSumOfInternationalPayments
+  getSumOfInternationalPayments,
+  getInternationalPayments
 } from "../models/internationalTours.js";
 
 //get all InternationalTour
@@ -158,5 +159,17 @@ export const showInternationalPayments = (req, res) => {
     if (err) {
       res.send(err);
     } else res.json(results);
+  });
+};
+
+
+//get all payments
+export const showAllInternationalPayments = (req, res) => {
+  getInternationalPayments((err, results) => {
+    if (err) {
+      res.send(err);
+    } else {
+      res.json(results);
+    }
   });
 };

@@ -1,5 +1,5 @@
 
-import { addCampRating, addCamping, getCampAverageRating, getCampAverageRatings, getCampRatings, getCampingById, getCampingCount, getCampings, getSumOfCampPayments } from "../models/campings.js";
+import { addCampRating, addCamping, getCampAverageRating, getCampAverageRatings, getCampPayments, getCampRatings, getCampingById, getCampingCount, getCampings, getSumOfCampPayments } from "../models/campings.js";
 
 import { getCampFileByFileName, getCampFileById, getCampFileCount, getCampIdByFileName } from "../fileUploads/campFiles.js"
 
@@ -148,5 +148,18 @@ export const showCampPayments = (req, res) => {
     if (err) {
       res.send(err);
     } else res.json(results);
+  });
+};
+
+
+
+//get all payments
+export const showAllCampPayments = (req, res) => {
+  getCampPayments((err, results) => {
+    if (err) {
+      res.send(err);
+    } else {
+      res.json(results);
+    }
   });
 };

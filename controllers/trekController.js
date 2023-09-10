@@ -14,6 +14,7 @@ import {
   getTrekAverageRatings,
   getTrekById,
   getTrekCount,
+  getTrekPayments,
   getTrekRatings,
   getTreks,
 } from "../models/treks.js";
@@ -161,6 +162,19 @@ export const showTrekPayments = (req, res) => {
     } else res.json(results);
   });
 };
+
+//get all payments
+export const showAllTrekPayments = (req, res) => {
+  getTrekPayments((err, results) => {
+    if (err) {
+      res.send(err);
+    } else {
+      res.json(results);
+    }
+  });
+};
+
+
 
 //get successful of trek 
 export const showSuccessfulTrek= (req, res) => {

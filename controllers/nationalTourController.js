@@ -1,7 +1,7 @@
 
 import { getNationalFileByFileName, getNationalFileById, getNationalFileCount, getNationalIdByFileName } from "../fileUploads/nationalFiles.js";
 import { getInternationalAverageRating } from "../models/internationalTours.js";
-import { addNationalRating, addNationalTour, getNationalAverageRatings, getNationalRatings, getNationalTourById, getNationalTourCount, getNationalTours, getSumOfNationalPayments } from "../models/nationalTours.js";
+import { addNationalRating, addNationalTour, getNationalAverageRatings, getNationalPayments, getNationalRatings, getNationalTourById, getNationalTourCount, getNationalTours, getSumOfNationalPayments } from "../models/nationalTours.js";
 
 
   //get all NationalTour
@@ -151,3 +151,15 @@ export const showNationalPayments = (req, res) => {
     } else res.json(results);
   });
 };
+
+//get all payments
+export const showAllNationalPayments = (req, res) => {
+  getNationalPayments((err, results) => {
+    if (err) {
+      res.send(err);
+    } else {
+      res.json(results);
+    }
+  });
+};
+

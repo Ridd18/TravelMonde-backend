@@ -120,3 +120,15 @@ export const getSumOfNationalPayments= (result)=> {
     }
   );
 }
+
+// get all pamyents
+export const getNationalPayments = (result) => {
+  db.query("select * from nationalpayment", (err, results) => {
+    if (err) {
+      console.log(err);
+      result(err, null);
+    } else {
+      result(null, results);
+    }
+  });
+};

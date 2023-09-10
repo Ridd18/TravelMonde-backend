@@ -30,6 +30,7 @@ import {
   showAllAVGTrek,
   showTrekPayments,
   showSuccessfulTrek,
+  showAllTrekPayments,
 } from "../controllers/trekController.js";
 import {
   CampingCount,
@@ -38,6 +39,7 @@ import {
   createCamping,
   showAVGCampById,
   showAllAVGCamping,
+  showAllCampPayments,
   showCampByCampName,
   showCampFileById,
   showCampIdByFilename,
@@ -53,6 +55,7 @@ import {
   createNationalTour,
   showAVGNationalTourById,
   showAllAVGnational,
+  showAllNationalPayments,
   showNationalFileById,
   showNationalIdByFilename,
   showNationalPayments,
@@ -74,6 +77,7 @@ import {
   showAVGInternationalTourById,
   showAllAVGInternational,
   showInternationalPayments,
+  showAllInternationalPayments,
 } from "../controllers/internationalTourController.js";
 
 import { upload, getListFiles, download } from "../fileUploads/trekFiles.js";
@@ -190,6 +194,9 @@ router.get("/successfulTrek", showSuccessfulTrek);
 //get sum of payments
 router.get("/trekSumPayments", showTrekPayments);
 
+//get all of payments
+router.get("/trekPayments", showAllTrekPayments);
+
 //CAMPINGS
 
 //add camping
@@ -247,6 +254,10 @@ router.get("/campingRatings", showCampRatings);
 
 //get sum of payments
 router.get("/campingSumPayments", showCampPayments);
+
+//get all of payments
+router.get("/campingPayments", showAllCampPayments);
+
 
 //NATIONAL TOUR
 
@@ -309,6 +320,9 @@ router.get("/nationalTourRatings", showNationalRatings);
 
 //get sum of payments
 router.get("/nationalTourSumPayments", showNationalPayments);
+
+//get all of payments
+router.get("/nationalTourPayments", showAllNationalPayments);
 
 //INTERNATIONAL TOURS
 
@@ -375,6 +389,9 @@ router.get("/internationalTourRatings", showInternationalRatings);
 //get sum of payments
 router.get("/internationalTourSumPayments", showInternationalPayments);
 
+//get all of payments
+router.get("/internationalTourPayments", showAllInternationalPayments);
+
 //FEEDBACK
 
 //add feedback
@@ -414,6 +431,9 @@ router.post("/createTrekPayment", async (req, res) => {
         // return result(err, null);
         console.log(res);
       }
+      const date = new Date()
+      const formattedDate = date.toLocaleDateString('en-GB'); 
+
       const paymentData = {
         // user_id: 1, // Assuming you have a user ID
         amount: amountInRupees,

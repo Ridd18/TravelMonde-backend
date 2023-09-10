@@ -123,6 +123,20 @@ export const getSumOfTrekPayments= (result)=> {
   );
 }
 
+// get all payments
+export const getTrekPayments = (result) => {
+  db.query("select * from trekpayment", (err, results) => {
+    if (err) {
+      console.log(err);
+      result(err, null);
+    } else {
+      result(null, results);
+    }
+  });
+};
+
+
+
 export const getSuccessfulTrek= (result)=> {
   db.query(
     "SELECT trek_name, AVG(rating) AS avg_rating FROM trekrating GROUP BY trek_name HAVING AVG(rating) = (SELECT MAX(avg_rating) FROM (SELECT AVG(rating) AS avg_rating FROM trekrating GROUP BY trek_name) AS subquery);",

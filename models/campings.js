@@ -123,3 +123,15 @@ export const getSumOfCampPayments= (result)=> {
     }
   );
 }
+
+// get all pamyents
+export const getCampPayments = (result) => {
+  db.query("select * from campingpayment", (err, results) => {
+    if (err) {
+      console.log(err);
+      result(err, null);
+    } else {
+      result(null, results);
+    }
+  });
+};
