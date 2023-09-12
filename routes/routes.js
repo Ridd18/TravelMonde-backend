@@ -413,6 +413,9 @@ router.delete("/feedback/delete/:id", deleteFeedback);
 
 import { stripeConfig } from "../payments/payment.js";
 
+import moment from 'moment-timezone';
+
+
 //Trek PAYMENTTT
 router.post("/createTrekPayment", async (req, res) => {
   const data = req.body;
@@ -431,13 +434,16 @@ router.post("/createTrekPayment", async (req, res) => {
         // return result(err, null);
         console.log(res);
       }
-      const date = new Date()
-      const formattedDate = date.toLocaleDateString('en-GB'); 
+    
+
+      const ISTTimeZone = 'Asia/Kolkata'; // IST time zone
+
+      const paymentDateIST = moment().tz(ISTTimeZone);
 
       const paymentData = {
         // user_id: 1, // Assuming you have a user ID
         amount: amountInRupees,
-        payment_date: new Date(),
+        payment_date: paymentDateIST.format(),
         trek_id: res[0].trek_id,
         file_name: res[0].name,
       };
@@ -489,10 +495,15 @@ router.post("/createCampPayment", async (req, res) => {
         // return result(err, null);
         console.log(res);
       }
+
+      const ISTTimeZone = 'Asia/Kolkata'; // IST time zone
+
+      const paymentDateIST = moment().tz(ISTTimeZone);
+
       const paymentData = {
         // user_id: 1, // Assuming you have a user ID
         amount: amountInRupees,
-        payment_date: new Date(),
+        payment_date: paymentDateIST.format(),
         camping_id: res[0].camping_id,
         file_name: res[0].name,
       };
@@ -549,12 +560,14 @@ router.post("/createNationalPayment", async (req, res) => {
         console.log(res);
       }
 
-      const amountInRupees = amount / 100;
+      const ISTTimeZone = 'Asia/Kolkata'; // IST time zone
+
+      const paymentDateIST = moment().tz(ISTTimeZone);
 
       const paymentData = {
         // user_id: 1, // Assuming you have a user ID
         amount: amountInRupees,
-        payment_date: new Date(),
+        payment_date:  paymentDateIST.format(),
         national_id: res[0].national_id,
         file_name: res[0].name,
       };
@@ -610,10 +623,16 @@ router.post("/createInternationalPayment", async (req, res) => {
         // return result(err, null);
         console.log(res);
       }
+
+      
+      const ISTTimeZone = 'Asia/Kolkata'; // IST time zone
+
+      const paymentDateIST = moment().tz(ISTTimeZone);
+
       const paymentData = {
         // user_id: 1, // Assuming you have a user ID
         amount: amountInRupees,
-        payment_date: new Date(),
+        payment_date:  paymentDateIST.format(),
         international_id: res[0].international_id,
         file_name: res[0].name,
       };
