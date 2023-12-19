@@ -9,36 +9,8 @@ export const storage = multer.diskStorage({
     cb(null, "./uploads/treks/");
   },
   filename: function (req, file, cb) {
-    const name = file.originalname;
-    console.log("filename in multer line 15", name);
-    cb(null, `${name}`);
-    const newName = name.slice(0, name.length - 4);
-    console.log("filename in multer line 20", newName);
-
-    db.query(
-      "select trek_id from treks where name = ?",
-      [newName],
-      (err, res) => {
-        if (err) {
-          console.log("Error selecting from USERS: ", err);
-          // return result(err, null);
-        }
-        //res should have the value for the familyId of the given user so in next line pass res not result
-        db.query(
-          "INSERT INTO trekfiles (file_name,trek_id) VALUES (?,?)",
-          [name, res[0].trek_id],
-          (err, res) => {
-            if (err) {
-              console.log("Error inserting in TASKS: ", err);
-              // return result(err, null);
-            }
-          }
-        );
-        console.log("created task: ");
-        // return result(null, err);
-      }
-    );
-
+    cb(null, file.originalname);
+   
   },
 });
 

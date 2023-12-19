@@ -9,63 +9,7 @@ export const storage = multer.diskStorage({
     cb(null, "./uploads/internationals/");
   },
   filename: function (req, file, cb) {
-    const name = file.originalname;
-
-    console.log("filename in multer line 15", name);
-    cb(null, `${name}`);
-
-    const newName = name.slice(0, name.length - 4);
-    console.log("filename in multer line 20", newName);
-
-    db.query(
-      "select international_id from internationalTour where name = ?",
-      [newName],
-      (err, res) => {
-        if (err) {
-          console.log("Error selecting from USERS: ", err);
-          // return result(err, null);
-        }
-        //res should have the value for the familyId of the given user so in next line pass res not result
-        db.query(
-          "INSERT INTO internationalfiles (file_name,international_id) VALUES (?,?)",
-          [name, res[0].international_id],
-          (err, res) => {
-            if (err) {
-              console.log("Error inserting in TASKS: ", err);
-              // return result(err, null);
-            }
-          }
-        );
-        console.log("created task: ");
-        // return result(null, err);
-      }
-    );
-
-    // db.query(
-    //     "select international_id from internationalTour where name = ?",
-    //     [newName],
-
-    //     (err, results) => {
-    //       if (err) {
-    //         console.log(err);
-    //       } else {
-    //         console.log("line 53",results);
-    //       }
-    //     }
-    //   );
-
-    // db.query(
-    //   "INSERT INTO internationalfiles SET file_name = ?",
-    //   [name],
-
-    //   (err, results) => {
-    //     if (err) {
-    //       console.log(err);
-    //     } else {
-    //       console.log(results);
-    //     }
-    //   }
-    // );
+    cb(null, file.originalname);
   },
 });
 
@@ -74,7 +18,6 @@ export const uploadInternationals = multer({ storage: storage });
 const baseUrl = "http://localhost:3000/";
 
 const baseDir = "C:/riddhesh/FinalYearProject/final/backend";
-
 
 //get tour id by filename
 export const getInternationalIdByFileName = (file_name, result) => {
@@ -171,19 +114,18 @@ export const getInternationalFileByFileName = (file_name, result) => {
   );
 };
 
-
 //get tour files by international id
 export const getInternationalFileById = (id, result) => {
-    db.query(
-      "select * from internationalFiles WHERE international_id = ?",
-      [id],
-      (err, results) => {
-        if (err) {
-          console.log(err);
-          result(err, null);
-        } else {
-          result(null, results[0]);
-        }
+  db.query(
+    "select * from internationalFiles WHERE international_id = ?",
+    [id],
+    (err, results) => {
+      if (err) {
+        console.log(err);
+        result(err, null);
+      } else {
+        result(null, results[0]);
       }
-    );
-  };
+    }
+  );
+};

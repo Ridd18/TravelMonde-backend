@@ -150,9 +150,9 @@ router.get("/trek/:id", showTrekById);
 //trek file upload
 
 //upload
-router.post("/trek/upload", upload.single("file"), (req, res) => {
-  res.json({ file: req.file });
-});
+// router.post("/trek/upload", upload.single("file"), (req, res) => {
+//   res.json({ file: req.file });
+// });
 
 //get all files
 router.get("/filesTrek", getListFiles);
@@ -211,13 +211,6 @@ router.get("/camping/count", CampingCount);
 // get single camping
 router.get("/camping/:id", showCampingById);
 
-//camp file upload
-
-//upload
-router.post("/camping/upload", uploadCamps.single("file"), (req, res) => {
-  res.json({ file: req.file });
-});
-
 //get all files
 router.get("/filesCamping", getListOFCampFiles);
 
@@ -258,7 +251,6 @@ router.get("/campingSumPayments", showCampPayments);
 //get all of payments
 router.get("/campingPayments", showAllCampPayments);
 
-
 //NATIONAL TOUR
 
 //add nationalTour
@@ -276,13 +268,13 @@ router.get("/nationalTour/:id", showNationalTourById);
 //national file upload
 
 //upload
-router.post(
-  "/nationalTour/upload",
-  uploadNationals.single("file"),
-  (req, res) => {
-    res.json({ file: req.file });
-  }
-);
+// router.post(
+//   "/nationalTour/upload",
+//   uploadNationals.single("file"),
+//   (req, res) => {
+//     res.json({ file: req.file });
+//   }
+// );
 
 //get all files
 router.get("/filesnationalTour", getListOFNationalFiles);
@@ -341,13 +333,6 @@ router.get("/internationalTour/:id", showInternationalTourById);
 //national file upload
 
 //upload
-router.post(
-  "/internationalTour/upload",
-  uploadInternationals.single("file"),
-  (req, res) => {
-    res.json({ file: req.file });
-  }
-);
 
 //get all files
 router.get("/filesinternationalTour", getListOFInternationalFiles);
@@ -413,8 +398,7 @@ router.delete("/feedback/delete/:id", deleteFeedback);
 
 import { stripeConfig } from "../payments/payment.js";
 
-import moment from 'moment-timezone';
-
+import moment from "moment-timezone";
 
 //Trek PAYMENTTT
 router.post("/createTrekPayment", async (req, res) => {
@@ -434,9 +418,8 @@ router.post("/createTrekPayment", async (req, res) => {
         // return result(err, null);
         console.log(res);
       }
-    
 
-      const ISTTimeZone = 'Asia/Kolkata'; // IST time zone
+      const ISTTimeZone = "Asia/Kolkata"; // IST time zone
 
       const paymentDateIST = moment().tz(ISTTimeZone);
 
@@ -496,7 +479,7 @@ router.post("/createCampPayment", async (req, res) => {
         console.log(res);
       }
 
-      const ISTTimeZone = 'Asia/Kolkata'; // IST time zone
+      const ISTTimeZone = "Asia/Kolkata"; // IST time zone
 
       const paymentDateIST = moment().tz(ISTTimeZone);
 
@@ -560,14 +543,14 @@ router.post("/createNationalPayment", async (req, res) => {
         console.log(res);
       }
 
-      const ISTTimeZone = 'Asia/Kolkata'; // IST time zone
+      const ISTTimeZone = "Asia/Kolkata"; // IST time zone
 
       const paymentDateIST = moment().tz(ISTTimeZone);
 
       const paymentData = {
         // user_id: 1, // Assuming you have a user ID
         amount: amountInRupees,
-        payment_date:  paymentDateIST.format(),
+        payment_date: paymentDateIST.format(),
         national_id: res[0].national_id,
         file_name: res[0].name,
       };
@@ -624,15 +607,14 @@ router.post("/createInternationalPayment", async (req, res) => {
         console.log(res);
       }
 
-      
-      const ISTTimeZone = 'Asia/Kolkata'; // IST time zone
+      const ISTTimeZone = "Asia/Kolkata"; // IST time zone
 
       const paymentDateIST = moment().tz(ISTTimeZone);
 
       const paymentData = {
         // user_id: 1, // Assuming you have a user ID
         amount: amountInRupees,
-        payment_date:  paymentDateIST.format(),
+        payment_date: paymentDateIST.format(),
         international_id: res[0].international_id,
         file_name: res[0].name,
       };
@@ -848,6 +830,518 @@ router.post("/addRatingInternational", async (req, res) => {
     console.error(err);
     res.status(500).json({ error: "An error occurred while creating rating." });
   }
+});
+
+//camp multiple file upload
+import mime from "mime";
+
+//upload in camping
+router.post("/camp/upload", uploadCamps.array("files"), (req, res) => {
+  const files = req.files;
+
+  files.forEach((file) => {
+    const { filename, path } = file;
+
+    console.log("filename is ", filename);
+
+    const file_path = path;
+    const mime_type = mime.getType(file_path);
+    console.log(mime_type);
+
+    if (
+      mime_type ==
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    ) {
+      const newName = filename.slice(0, filename.length - 5);
+      console.log("filename in routes line 231", newName);
+      console.log("file contains of  ", file);
+
+      console.log("new name in docx is:", newName);
+
+      db.query(
+        "select camping_id from camping where name = ?",
+        [newName],
+        (err, res) => {
+          if (err) {
+            console.log("Error selecting from campings: ", err);
+            //
+            return result(err, null);
+          }
+
+          const camp_id = res;
+          console.log("camp id  : ", camp_id);
+
+          const sql =
+            "INSERT INTO campfiles (image_name,file_name,camping_id) VALUES (?,?,?)";
+          db.query(
+            sql,
+            [filename, filename, res[0].camping_id],
+            (err, result) => {
+              if (err) {
+                console.log("Error inserting in TASKS: ", err);
+                // return result(err, null);
+              }
+            }
+          );
+
+          console.log("created task: ");
+          // return result(null, err);
+        }
+      );
+    } else if (mime_type == "application/pdf") {
+      const newName = filename.slice(0, filename.length - 4);
+      console.log("filename in routes line 231", newName);
+      console.log("file contains of  ", file);
+
+      console.log("new name in pdf is:", newName);
+
+      db.query(
+        "select camping_id from camping where name = ?",
+        [newName],
+        (err, res) => {
+          if (err) {
+            console.log("Error selecting from campings: ", err);
+            //
+            return result(err, null);
+          }
+
+          const camp_id = res;
+          console.log("camp id  : ", camp_id);
+
+          const sql =
+            "INSERT INTO campfiles (image_name,file_name,camping_id) VALUES (?,?,?)";
+          db.query(
+            sql,
+            [filename, filename, res[0].camping_id],
+            (err, result) => {
+              if (err) {
+                console.log("Error inserting in TASKS: ", err);
+                // return result(err, null);
+              }
+            }
+          );
+
+          console.log("created task: ");
+          // return result(null, err);
+        }
+      );
+    } else if (
+      mime_type == "image/jpeg" ||
+      mime_type == "image/png" ||
+      mime_type == "image/x-png" ||
+      mime_type == "image/bmp" ||
+      mime_type == "image/gif"
+    ) {
+      const newName = filename.slice(0, filename.length - 4);
+      console.log("filename in routes line 231", newName);
+      console.log("file contains of  ", file);
+
+      console.log("new name in imgs is:", newName);
+
+      db.query(
+        "select camping_id from camping where name = ?",
+        [newName],
+        (err, res) => {
+          if (err) {
+            console.log("Error selecting from campings: ", err);
+            //
+            return result(err, null);
+          }
+
+          const camp_id = res;
+          console.log("camp id  : ", camp_id);
+
+          const sql =
+            "INSERT INTO campfiles (image_name,file_name,camping_id) VALUES (?,?,?)";
+          db.query(
+            sql,
+            [filename, filename, res[0].camping_id],
+            (err, result) => {
+              if (err) {
+                console.log("Error inserting in TASKS: ", err);
+                // return result(err, null);
+              }
+            }
+          );
+
+          console.log("created task: ");
+          // return result(null, err);
+        }
+      );
+    }
+  });
+
+  res.json({ message: "Files uploaded successfully" });
+});
+
+//trek multiple files upload
+router.post("/trek/upload", upload.array("files"), (req, res) => {
+  const files = req.files;
+
+  files.forEach((file) => {
+    const { filename, path } = file;
+
+    console.log("filename is ", filename);
+
+    const file_path = path;
+    const mime_type = mime.getType(file_path);
+    console.log(mime_type);
+
+    if (
+      mime_type ==
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    ) {
+      const newName = filename.slice(0, filename.length - 5);
+      console.log("filename in routes line 231", newName);
+      console.log("file contains of  ", file);
+
+      console.log("new name in docx is:", newName);
+
+      db.query(
+        "select trek_id from treks where name = ?",
+        [newName],
+        (err, res) => {
+          if (err) {
+            console.log("Error selecting from treks: ", err);
+            //
+            return result(err, null);
+          }
+
+          const camp_id = res;
+          console.log("trek id  : ", camp_id);
+
+          const sql = "INSERT INTO trekfiles (file_name,trek_id) VALUES (?,?)";
+          db.query(sql, [filename, res[0].trek_id], (err, result) => {
+            if (err) {
+              console.log("Error inserting in TASKS: ", err);
+              // return result(err, null);
+            }
+          });
+
+          console.log("created task: ");
+          // return result(null, err);
+        }
+      );
+    } else if (mime_type == "application/pdf") {
+      const newName = filename.slice(0, filename.length - 4);
+      console.log("filename in routes line 231", newName);
+      console.log("file contains of  ", file);
+
+      console.log("new name in pdf is:", newName);
+
+      db.query(
+        "select trek_id from treks where name = ?",
+        [newName],
+        (err, res) => {
+          if (err) {
+            console.log("Error selecting from treks: ", err);
+            //
+            return result(err, null);
+          }
+
+          const camp_id = res;
+          console.log("trek id  : ", camp_id);
+
+          const sql = "INSERT INTO trekfiles (file_name,trek_id) VALUES (?,?)";
+          db.query(sql, [filename, res[0].trek_id], (err, result) => {
+            if (err) {
+              console.log("Error inserting in TASKS: ", err);
+              // return result(err, null);
+            }
+          });
+
+          console.log("created task: ");
+          // return result(null, err);
+        }
+      );
+    } else if (
+      mime_type == "image/jpeg" ||
+      mime_type == "image/png" ||
+      mime_type == "image/x-png" ||
+      mime_type == "image/bmp" ||
+      mime_type == "image/gif"
+    ) {
+      const newName = filename.slice(0, filename.length - 4);
+      console.log("filename in routes line 231", newName);
+      console.log("file contains of  ", file);
+
+      console.log("new name in imgs is:", newName);
+
+      db.query(
+        "select trek_id from treks where name = ?",
+        [newName],
+        (err, res) => {
+          if (err) {
+            console.log("Error selecting from treks: ", err);
+            //
+            return result(err, null);
+          }
+
+          const camp_id = res;
+          console.log("trek id  : ", camp_id);
+
+          const sql = "INSERT INTO trekfiles (file_name,trek_id) VALUES (?,?)";
+          db.query(sql, [filename, res[0].trek_id], (err, result) => {
+            if (err) {
+              console.log("Error inserting in TASKS: ", err);
+              // return result(err, null);
+            }
+          });
+
+          console.log("created task: ");
+          // return result(null, err);
+        }
+      );
+    }
+  });
+  res.json({ message: "Files uploaded successfully" });
+});
+
+//national tours multiple file upload
+router.post("/nationalTour/upload", uploadNationals.array("files"), (req, res) => {
+  const files = req.files;
+
+  files.forEach((file) => {
+    const { filename, path } = file;
+
+    console.log("filename is ", filename);
+
+    const file_path = path;
+    const mime_type = mime.getType(file_path);
+    console.log(mime_type);
+
+    if (
+      mime_type ==
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    ) {
+      const newName = filename.slice(0, filename.length - 5);
+      console.log("filename in routes line 231", newName);
+      console.log("file contains of  ", file);
+
+      console.log("new name in docx is:", newName);
+
+      db.query(
+        "select national_id from nationalTour where name = ?",
+        [newName],
+        (err, res) => {
+          if (err) {
+            console.log("Error selecting from national tours: ", err);
+            //
+            return result(err, null);
+          }
+
+          const sql =
+            "INSERT INTO nationalfiles (file_name,national_id) VALUES (?,?)";
+          db.query(sql, [filename, res[0].national_id], (err, result) => {
+            if (err) {
+              console.log("Error inserting in TASKS: ", err);
+              // return result(err, null);
+            }
+          });
+
+          console.log("created task: ");
+          // return result(null, err);
+        }
+      );
+    } else if (mime_type == "application/pdf") {
+      const newName = filename.slice(0, filename.length - 4);
+      console.log("filename in routes line 231", newName);
+      console.log("file contains of  ", file);
+
+      console.log("new name in pdf is:", newName);
+
+      db.query(
+        "select national_id from nationalTour where name = ?",
+        [newName],
+        (err, res) => {
+          if (err) {
+            console.log("Error selecting from national Tours: ", err);
+            //
+            return result(err, null);
+          }
+
+          const camp_id = res;
+          console.log("trek id  : ", camp_id);
+
+          const sql =
+            "INSERT INTO nationalfiles (file_name,national_id) VALUES (?,?)";
+          db.query(sql, [filename, res[0].national_id], (err, result) => {
+            if (err) {
+              console.log("Error inserting in TASKS: ", err);
+              // return result(err, null);
+            }
+          });
+
+          console.log("created task: ");
+          // return result(null, err);
+        }
+      );
+    } else if (
+      mime_type == "image/jpeg" ||
+      mime_type == "image/png" ||
+      mime_type == "image/x-png" ||
+      mime_type == "image/bmp" ||
+      mime_type == "image/gif"
+    ) {
+      const newName = filename.slice(0, filename.length - 4);
+      console.log("filename in routes line 231", newName);
+      console.log("file contains of  ", file);
+
+      console.log("new name in imgs is:", newName);
+
+      db.query(
+        "select national_id from nationalTour where name = ?",
+        [newName],
+        (err, res) => {
+          if (err) {
+            console.log("Error selecting from national Tours: ", err);
+            //
+            return result(err, null);
+          }
+
+          const camp_id = res;
+          console.log("trek id  : ", camp_id);
+
+          const sql =
+            "INSERT INTO nationalfiles (file_name,national_id) VALUES (?,?)";
+          db.query(sql, [filename, res[0].national_id], (err, result) => {
+            if (err) {
+              console.log("Error inserting in TASKS: ", err);
+              // return result(err, null);
+            }
+          });
+
+          console.log("created task: ");
+          // return result(null, err);
+        }
+      );
+    }
+  });
+  res.json({ message: "Files uploaded successfully" });
+});
+
+//international tours multiple file upload
+router.post("/internationalTour/upload", uploadInternationals.array("files"), (req, res) => {
+  const files = req.files;
+
+  files.forEach((file) => {
+    const { filename, path } = file;
+
+    console.log("filename is ", filename);
+
+    const file_path = path;
+    const mime_type = mime.getType(file_path);
+    console.log(mime_type);
+
+    if (
+      mime_type ==
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    ) {
+      const newName = filename.slice(0, filename.length - 5);
+      console.log("filename in routes line 231", newName);
+      console.log("file contains of  ", file);
+
+      console.log("new name in docx is:", newName);
+
+      db.query(
+        "select international_id from internationalTour where name = ?",
+        [newName],
+        (err, res) => {
+          if (err) {
+            console.log("Error selecting from international tours: ", err);
+            //
+            return result(err, null);
+          }
+
+  
+          const sql =
+            "INSERT INTO internationalfiles (file_name,international_id) VALUES (?,?)";
+          db.query(sql, [filename, res[0].international_id], (err, result) => {
+            if (err) {
+              console.log("Error inserting in TASKS: ", err);
+              // return result(err, null);
+            }
+          });
+
+          console.log("created task: ");
+          // return result(null, err);
+        }
+      );
+    } else if (mime_type == "application/pdf") {
+      const newName = filename.slice(0, filename.length - 4);
+      console.log("filename in routes line 231", newName);
+      console.log("file contains of  ", file);
+
+      console.log("new name in pdf is:", newName);
+
+      db.query(
+        "select international_id from internationalTour where name = ?",
+        [newName],
+        (err, res) => {
+          if (err) {
+            console.log("Error selecting from international Tours: ", err);
+            //
+            return result(err, null);
+          }
+
+          const camp_id = res;
+          console.log("trek id  : ", camp_id);
+
+          const sql =
+            "INSERT INTO internationalfiles (file_name,international_id) VALUES (?,?)";
+          db.query(sql, [filename, res[0].international_id], (err, result) => {
+            if (err) {
+              console.log("Error inserting in TASKS: ", err);
+              // return result(err, null);
+            }
+          });
+
+          console.log("created task: ");
+          // return result(null, err);
+        }
+      );
+    } else if (
+      mime_type == "image/jpeg" ||
+      mime_type == "image/png" ||
+      mime_type == "image/x-png" ||
+      mime_type == "image/bmp" ||
+      mime_type == "image/gif"
+    ) {
+      const newName = filename.slice(0, filename.length - 4);
+      console.log("filename in routes line 231", newName);
+      console.log("file contains of  ", file);
+
+      console.log("new name in imgs is:", newName);
+
+      db.query(
+        "select international_id from internationalTour where name = ?",
+        [newName],
+        (err, res) => {
+          if (err) {
+            console.log("Error selecting from international Tours: ", err);
+            //
+            return result(err, null);
+          }
+
+          const camp_id = res;
+          console.log("trek id  : ", camp_id);
+
+          const sql =
+            "INSERT INTO internationalfiles (file_name,international_id) VALUES (?,?)";
+          db.query(sql, [filename, res[0].international_id], (err, result) => {
+            if (err) {
+              console.log("Error inserting in TASKS: ", err);
+              // return result(err, null);
+            }
+          });
+
+          console.log("created task: ");
+          // return result(null, err);
+        }
+      );
+    }
+  });
+  res.json({ message: "Files uploaded successfully" });
 });
 
 export default router;
